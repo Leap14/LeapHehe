@@ -5,11 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SAOMA Food & Drink – Snacks, Drinks & More</title>
-    <!-- Khmer Font: Battambang -->
     <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         :root {
@@ -18,11 +19,7 @@
             --dark: #1a1a1a;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -37,13 +34,13 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
         }
 
         .navbar {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem 1rem;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -51,14 +48,11 @@
             gap: 1rem;
         }
 
-        .logo img {
-            height: 60px;
-            width: 60px;
-        }
+        .logo img { height: 60px; width: 60px; }
 
         .opening-hours {
             font-size: 0.9rem;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
             padding: 6px 12px;
             border-radius: 30px;
             white-space: nowrap;
@@ -74,57 +68,24 @@
             padding: 5px;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 1.2rem;
-            list-style: none;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .nav-links { display: flex; gap: 1.2rem; list-style: none; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: #ffd700; }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-
-        }
-
-        .nav-md a {
-            color: white;
-            text-decoration: none;
-            padding: 2px;
-
-        }
-
-        .nav-md a:hover {
-            color: black;
-        }
-
-        .nav-md {
-            list-style: none;
-        }
-
-        .nav-links a:hover {
-            color: #ffd700;
-
-        }
+        .nav-md { list-style: none; }
+        .nav-md a { color: white; text-decoration: none; padding: 2px; }
+        .nav-md a:hover { color: black; }
 
         .mobile-menu {
             display: none;
             position: fixed;
-            top: 95px;
-            left: 0;
-            right: 0;
+            top: 95px; left: 0; right: 0;
             background: var(--primary);
             padding: 1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 999;
         }
-
-        .mobile-menu.show {
-            display: block;
-        }
+        .mobile-menu.show { display: block; }
 
         .btn {
             background: var(--primary);
@@ -137,11 +98,73 @@
             transition: all 0.3s;
             font-size: 1rem;
         }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255,87,34,0.4); }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.4);
+        /* ===================== TOAST NOTIFICATION ===================== */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
         }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a1a;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            font-size: 0.95rem;
+            font-weight: 500;
+            min-width: 260px;
+            max-width: 340px;
+            border-left: 4px solid var(--primary);
+            animation: toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+            pointer-events: auto;
+        }
+
+        .toast.removing {
+            animation: toastOut 0.35s ease forwards;
+        }
+
+        .toast-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .toast-body { flex: 1; }
+        .toast-title { font-weight: 700; color: #ff7043; margin-bottom: 2px; }
+        .toast-msg { opacity: 0.85; font-size: 0.88rem; }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 6px;
+            pointer-events: auto;
+            flex-shrink: 0;
+        }
+        .toast-close:hover { color: white; background: rgba(255,255,255,0.1); }
+
+        @keyframes toastIn {
+            0% { opacity: 0; transform: translateX(60px) scale(0.9); }
+            100% { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes toastOut {
+            0% { opacity: 1; transform: translateX(0) scale(1); }
+            100% { opacity: 0; transform: translateX(60px) scale(0.9); }
+        }
+        /* ============================================================= */
 
         .banner {
             position: relative;
@@ -162,7 +185,7 @@
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)),
+                linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.75)),
                 url('IMG/image.png') 90% center / cover no-repeat;
         }
 
@@ -171,8 +194,8 @@
             inset: 0;
             z-index: -1;
             background-image:
-                radial-gradient(circle, rgba(255, 255, 255, 0.25) 1px, transparent 1px),
-                radial-gradient(circle, rgba(255, 200, 100, 0.18) 1px, transparent 1px);
+                radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1px),
+                radial-gradient(circle, rgba(255,200,100,0.18) 1px, transparent 1px);
             background-size: 80px 80px, 150px 150px;
             animation: gentleFloat 50s linear infinite;
             opacity: 0.65;
@@ -181,7 +204,7 @@
         .banner h1 {
             font-size: clamp(2.4rem, 8vw, 4.5rem);
             font-weight: 800;
-            text-shadow: 0 8px 30px rgba(0, 0, 0, 0.85);
+            text-shadow: 0 8px 30px rgba(0,0,0,0.85);
             margin-bottom: 1rem;
             z-index: 2;
         }
@@ -189,7 +212,7 @@
         .banner p {
             font-size: clamp(1.1rem, 4vw, 1.5rem);
             max-width: 720px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.8);
             margin-bottom: 2.5rem;
             z-index: 2;
         }
@@ -203,56 +226,21 @@
             font-weight: 700;
             border: none;
             cursor: pointer;
-            box-shadow: 0 12px 35px rgba(255, 87, 34, 0.55);
+            box-shadow: 0 12px 35px rgba(255,87,34,0.55);
             z-index: 2;
             transition: all 0.4s;
         }
-
-        .banner-btn:hover {
-            transform: translateY(-6px) scale(1.06);
-        }
-
-        @keyframes slowPanZoom {
-            0% {
-                background-position: 45% 40%;
-                background-size: 112%;
-            }
-
-            100% {
-                background-position: 55% 60%;
-                background-size: 120%;
-            }
-        }
+        .banner-btn:hover { transform: translateY(-6px) scale(1.06); }
 
         @keyframes gentleFloat {
-            0% {
-                background-position: 0 0, 60px 80px;
-            }
-
-            100% {
-                background-position: 120px 100px, -80px 160px;
-            }
+            0% { background-position: 0 0, 60px 80px; }
+            100% { background-position: 120px 100px, -80px 160px; }
         }
 
-        h2 {
-            text-align: center;
-            margin: 3rem 0 1.5rem;
-            font-size: clamp(1.8rem, 5vw, 2.2rem);
-        }
+        h2 { text-align: center; margin: 3rem 0 1.5rem; font-size: clamp(1.8rem, 5vw, 2.2rem); }
 
-        .category-filter {
-            text-align: center;
-            margin: 2.5rem 0 1.5rem;
-            padding: 0 1rem;
-        }
-
-        .category-filter button {
-            margin: 8px 6px;
-            padding: 12px 22px;
-            font-size: 1rem;
-            border-radius: 50px;
-            white-space: nowrap;
-        }
+        .category-filter { text-align: center; margin: 2.5rem 0 1.5rem; padding: 0 1rem; }
+        .category-filter button { margin: 8px 6px; padding: 12px 22px; font-size: 1rem; border-radius: 50px; white-space: nowrap; }
 
         .product-grid {
             display: grid;
@@ -273,34 +261,15 @@
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
             transition: all 0.4s ease;
         }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        .product-card img { width: 100%; height: 180px; object-fit: contain; background: #f8f8f8; padding: 12px; }
 
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-        }
+        .product-info { padding: 1rem; text-align: center; }
 
-        .product-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: contain;
-            background: #f8f8f8;
-            padding: 12px;
-        }
-
-        .product-info {
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .price {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 0.6rem 0;
-        }
+        .price { font-size: 1.35rem; font-weight: 700; color: var(--primary); margin: 0.6rem 0; }
 
         .cart-container {
             max-width: 900px;
@@ -308,7 +277,7 @@
             background: white;
             border-radius: 20px;
             padding: 1.8rem 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
 
         .cart-item {
@@ -323,11 +292,7 @@
         }
 
         @media (min-width: 640px) {
-            .cart-item {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
+            .cart-item { flex-direction: row; justify-content: space-between; align-items: center; }
         }
 
         .quantity-control {
@@ -337,12 +302,10 @@
             background: white;
             padding: 6px 10px;
             border-radius: 30px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-
         .quantity-control button {
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             border: none;
             background: var(--primary);
             color: white;
@@ -351,8 +314,7 @@
             cursor: pointer;
         }
 
-        input,
-        textarea {
+        input, textarea {
             width: 100%;
             padding: 14px;
             margin: 8px 0 16px;
@@ -361,10 +323,82 @@
             font-size: 1rem;
         }
 
+        /* ===================== CHECKOUT ORDER SUMMARY ===================== */
+        .order-summary-box {
+            background: linear-gradient(135deg, #fff8f6, #fff3f0);
+            border: 2px solid #ffccbc;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-summary-box h3 {
+            font-size: 1.15rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #ffccbc;
+            padding-bottom: 10px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            gap: 1rem;
+        }
+
+        .summary-item:last-child { border-bottom: none; }
+
+        .summary-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .summary-item-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            background: white;
+            border-radius: 10px;
+            padding: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            flex-shrink: 0;
+        }
+
+        .summary-item-name { font-weight: 600; font-size: 0.95rem; }
+        .summary-item-qty { color: #888; font-size: 0.85rem; margin-top: 2px; }
+
+        .summary-item-price {
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .summary-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px dashed #ffccbc;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .summary-total-row span:last-child { color: var(--primary); }
+        /* ================================================================ */
+
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0,0,0,0.85);
             display: none;
             align-items: center;
             justify-content: center;
@@ -391,21 +425,13 @@
             font-size: 0.95rem;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hamburger {
-                display: block;
-            }
+            .nav-links { display: none; }
+            .hamburger { display: block; }
         }
 
-        /* Closed Notice */
         #closed-notice {
             position: fixed;
             inset: 0;
@@ -419,29 +445,11 @@
             padding: 2rem;
         }
 
-        .closed-content {
-            max-width: 500px;
-        }
+        .closed-content { max-width: 500px; }
+        .closed-content h1 { font-size: 3rem; margin-bottom: 1rem; color: #ff5722; }
+        .closed-content p { font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9; }
+        #current-time { font-size: 1.1rem; margin-top: 1.5rem; opacity: 0.8; }
 
-        .closed-content h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #ff5722;
-        }
-
-        .closed-content p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        #current-time {
-            font-size: 1.1rem;
-            margin-top: 1.5rem;
-            opacity: 0.8;
-        }
-
-        /* Login loading overlay */
         #login-loading {
             display: none;
             position: fixed;
@@ -455,35 +463,93 @@
             font-size: 1.2rem;
             gap: 1rem;
         }
-        #login-loading.show {
-            display: flex;
-        }
+        #login-loading.show { display: flex; }
         .spinner {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             border: 5px solid rgba(255,255,255,0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===================== MAP STYLES ===================== */
+        .map-wrapper {
+            margin-top: 12px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid #ffccbc;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        #delivery-map {
+            width: 100%;
+            height: 320px;
+        }
+        .map-hint {
+            background: linear-gradient(135deg, #fff8f6, #fff3f0);
+            border: 1px solid #ffccbc;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            color: #777;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .map-pin-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .map-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0 6px;
+        }
+        .map-tab {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #555;
+        }
+        .map-tab.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        /* ===================================================== */
     </style>
 </head>
 
 <body>
 
-    <!-- Header -->
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
     <header>
         <nav class="navbar">
             <div class="logo">
                 <img src="IMG/image-removebg-preview.png" alt="SAOMA Logo"
-                    style="cursor: pointer; transition: transform 0.3s;" onclick="goHome()"
-                    onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                    style="cursor:pointer; transition:transform 0.3s;"
+                    onclick="goHome()"
+                    onmouseover="this.style.transform='scale(1.08)'"
+                    onmouseout="this.style.transform='scale(1)'">
             </div>
             <div class="opening-hours">🕒 Open: 6:00 PM - 3:00 AM</div>
-
             <button class="hamburger" id="hamburger">☰</button>
-
             <ul class="nav-links">
                 <li><a href="#home" class="nav-item">Home</a></li>
                 <li><a href="#products" class="nav-item">Products</a></li>
@@ -500,21 +566,18 @@
                 <li><a href="#products">Products</a></li>
                 <li><a href="#cart" id="mobile-cart-link">Cart (<span id="mobile-cart-count">0</span>)</a></li>
                 <li><a href="#orders" id="mobile-orders-link">My Orders</a></li>
-                <li><button id="mobile-login-btn" class="btn" style="width:100%; margin-top:10px;">Login with
-                        Gmail</button></li>
+                <li><button id="mobile-login-btn" class="btn" style="width:100%; margin-top:10px;">Login with Gmail</button></li>
                 <li id="mobile-user-info" class="hidden"></li>
             </ul>
         </div>
     </header>
 
-    <!-- Login loading overlay -->
     <div id="login-loading">
         <div class="spinner"></div>
         <p>Signing in with Google...</p>
     </div>
 
     <main>
-        <!-- Banner -->
         <section id="home" class="banner">
             <div class="particles"></div>
             <h1>Welcome to SAOMA Food & Drink</h1>
@@ -522,13 +585,11 @@
             <button onclick="goToProducts()" class="banner-btn">Order Now →</button>
         </section>
 
-        <!-- Featured -->
         <section id="featured">
             <h2>Featured Items</h2>
             <div class="product-grid" id="featured-grid"></div>
         </section>
 
-        <!-- All Products -->
         <section id="products">
             <h2>មុខ​ម្ហូប & ភេសជ្ជៈ</h2>
             <div class="category-filter">
@@ -539,7 +600,6 @@
             <div class="product-grid" id="products-grid"></div>
         </section>
 
-        <!-- Cart -->
         <section id="cart" class="hidden">
             <div class="cart-container">
                 <h2>Your Cart</h2>
@@ -547,17 +607,26 @@
                 <div class="cart-total" style="font-size:1.5rem; text-align:right; margin:2rem 0;">
                     Total: ៛<span id="cart-total">0</span>
                 </div>
-                <div class="text-center">
-                    <button id="checkout-btn" class="btn" style="width:100%; max-width:400px; padding:16px;">Proceed to
-                        Checkout →</button>
+                <div style="display:flex; justify-content:center;">
+                    <button id="checkout-btn" class="btn" style="width:100%; max-width:400px; padding:16px;">Proceed to Checkout →</button>
                 </div>
             </div>
         </section>
 
-        <!-- Checkout -->
         <section id="checkout" class="hidden">
             <div class="cart-container">
                 <h2>Checkout</h2>
+
+                <!-- ✅ ORDER SUMMARY -->
+                <div class="order-summary-box" id="checkout-summary">
+                    <h3>🛒 Your Order</h3>
+                    <div id="checkout-summary-items"></div>
+                    <div class="summary-total-row">
+                        <span>Total</span>
+                        <span>៛<span id="checkout-summary-total">0</span></span>
+                    </div>
+                </div>
+
                 <form id="order-form">
                     <div style="display:grid; grid-template-columns:1fr; gap:1rem;">
                         <div>
@@ -570,14 +639,36 @@
                         </div>
                     </div>
 
-                    <div style="margin: 25px 0;">
-                        <label>📍 Delivery Location <span style="color:red;">*</span></label><br>
-                        <button type="button" id="get-location-btn" class="btn"
-                            style="background:#2196f3; width:100%; margin:12px 0;">
-                            📍 Get My Current Location (GPS)
-                        </button>
+                    <div style="margin:25px 0;">
+                        <label>📍 Delivery Location <span style="color:red;">*</span></label>
+                        <span class="map-pin-badge">📌 Pin your location on the map</span>
+
+                        <!-- Tab switcher -->
+                        <div class="map-tabs">
+                            <button type="button" class="map-tab active" id="tab-map" onclick="switchMapTab('map')">🗺️ Pin on Map</button>
+                            <button type="button" class="map-tab" id="tab-gps" onclick="switchMapTab('gps')">📍 Use GPS</button>
+                        </div>
+
+                        <!-- Map panel -->
+                        <div id="panel-map">
+                            <div class="map-wrapper">
+                                <div id="delivery-map"></div>
+                            </div>
+                            <div class="map-hint">
+                                💡 Tap anywhere on the map to drop a pin for your delivery location. Drag the pin to adjust.
+                            </div>
+                        </div>
+
+                        <!-- GPS panel -->
+                        <div id="panel-gps" style="display:none;">
+                            <button type="button" id="get-location-btn" class="btn" style="background:#2196f3; width:100%; margin:12px 0;">
+                                📍 Get My Current Location (GPS)
+                            </button>
+                        </div>
+
+                        <!-- Shared location display -->
                         <div id="location-display"
-                            style="font-size:0.95rem; color:#555; min-height: 80px; background:#f9f9f9; padding:12px; border-radius:8px; margin-top:10px;">
+                            style="font-size:0.95rem; color:#555; min-height:60px; background:#f9f9f9; padding:12px; border-radius:8px; margin-top:10px;">
                             No location selected yet.
                         </div>
                     </div>
@@ -587,7 +678,7 @@
                         <textarea id="note" rows="3" placeholder="No ice, extra chili..."></textarea>
                     </div>
 
-                    <div class="text-center">
+                    <div style="display:flex; justify-content:center;">
                         <button type="submit" class="btn" style="width:100%; max-width:400px; padding:16px;">
                             ✅ Place Order & Pay with ABA QR
                         </button>
@@ -596,7 +687,6 @@
             </div>
         </section>
 
-        <!-- Order History -->
         <section id="orders" class="hidden">
             <div class="cart-container">
                 <h2 style="text-align:center; margin-bottom:2rem;">My Order History</h2>
@@ -604,13 +694,11 @@
             </div>
         </section>
 
-        <!-- Success -->
         <section id="success" class="hidden">
             <div class="cart-container">
                 <h1>🎉 Order Placed Successfully!</h1>
                 <p>Thank you!<br>Your order has been sent to the admin with payment proof.</p>
-                <div id="success-details"
-                    style="text-align:left; margin:20px 0; background:#f9f9f9; padding:15px; border-radius:12px;"></div>
+                <div id="success-details" style="text-align:left; margin:20px 0; background:#f9f9f9; padding:15px; border-radius:12px;"></div>
                 <button onclick="goHome()" class="btn" style="width:100%; max-width:300px;">Back to Home</button>
             </div>
         </section>
@@ -620,40 +708,31 @@
         © 2026 SAOMA Food & Drink. Made with ❤️ in Kampong Thom.
     </footer>
 
-    <!-- QR Modal -->
     <div id="qr-modal" class="modal">
         <div class="modal-content">
             <h2>Scan to Pay with ABA</h2>
             <p id="qr-amount" style="font-size:1.5rem; font-weight:bold; color:#ff5722;"></p>
-            <img src="IMG/Qr.jpg" alt="ABA QR Code"
-                style="width:100%; max-width:280px; border-radius:12px; margin:15px 0;">
+            <img src="IMG/Qr.jpg" alt="ABA QR Code" style="width:100%; max-width:280px; border-radius:12px; margin:15px 0;">
             <p style="margin:15px 0;">Open <strong>ABA Mobile App</strong> → Scan QR Code</p>
-
             <div style="margin:20px 0;">
                 <label>📸 Upload Payment Proof (Screenshot) <span style="color:red;">*</span></label>
-                <input type="file" id="payment-proof" accept="image/*"
-                    style="width:100%; padding:10px; margin-top:8px;">
+                <input type="file" id="payment-proof" accept="image/*" style="width:100%; padding:10px; margin-top:8px;">
             </div>
-            <button id="confirm-payment-btn" class="btn" disabled style="width:100%;">✅ I Have Paid - Send Proof to
-                Admin</button>
-            <button onclick="closeQRModal()" class="btn"
-                style="background:#666; margin-top:10px; width:100%;">Cancel</button>
+            <button id="confirm-payment-btn" class="btn" disabled style="width:100%;">✅ I Have Paid - Send Proof to Admin</button>
+            <button onclick="closeQRModal()" class="btn" style="background:#666; margin-top:10px; width:100%;">Cancel</button>
         </div>
     </div>
 
-    <!-- Login Modal -->
     <div id="login-modal" class="modal">
         <div class="modal-content">
             <h2>Sign in with Gmail</h2>
             <p>Fast & Secure</p>
-            <button onclick="signInWithGoogle()" class="btn"
-                style="background:#4285f4; width:100%; margin:15px 0;">Continue with Google</button>
+            <button onclick="signInWithGoogle()" class="btn" style="background:#4285f4; width:100%; margin:15px 0;">Continue with Google</button>
             <button onclick="closeLoginModal()" class="btn" style="background:#666; width:100%;">Cancel</button>
         </div>
     </div>
 
     <script>
-        
         // ==================== Firebase ====================
         const firebaseConfig = {
             apiKey: "AIzaSyCMyF3ow0w-KoXGNbgcG6ZsydPFENj8h0E",
@@ -668,22 +747,22 @@
 
         // ==================== Products ====================
         const products = [
-            { id: 1, name: "ប្រហិតឆឹង", price: 10000, image: "IMG/Brorhit.jpg", category: "food" },
-            { id: 2, name: "សាច់គោបំពងល្ងរ", price: 12000, image: "IMG/sachko.jpg", category: "food" },
-            { id: 3, name: "សាច់គោឆាក្ដៅ", price: 12000, image: "IMG/chakdavsachko.jpg", category: "food" },
-            { id: 4, name: "គោងៀត", price: 15000, image: "IMG/D2ICz.jpg", category: "food" },
-            { id: 5, name: "ស្ទេកសាច់គោ", price: 20000, image: "IMG/6oLJM.jpg", category: "food" },
-            { id: 6, name: "ឆ្អឺងជំនីជ្រូកបំពងរ៉៉តឌី", price: 12000, image: "IMG/GbiSt.jpg", category: "food" },
-            { id: 7, name: "ឆ្អឹងជំនីជ្រូកឆាជូអែម", price: 12000, image: "IMG/YlFe3.jpg", category: "food" },
-            { id: 8, name: "ឡាបសាច់ជ្រូក", price: 12000, image: "IMG/gQTkd.jpg", category: "food" },
-            { id: 9, name: "គោឡើងភ្នំមួយឈុត", price: 40000, image: "IMG/fZAcb.jpg", category: "food" },
-            { id: 10, name: "ឈាមទាសុីឈ័ន", price: 12000, image: "IMG/Cxck9.jpg", category: "food" },
-            { id: 11, name: "គ្រឿងសមុទ្រឆាប្រៃផ្អែម", price: 20000, image: "IMG/kzGic.jpg", category: "food" },
-            { id: 13, name: "កូកា", price: 2000, image: "IMG/coca.jpg", category: "drink" },
-            { id: 14, name: "ស្ទីង", price: 2000, image: "IMG/Sting.jpg", category: "drink" },
-            { id: 15, name: "ទឹក", price: 1000, image: "IMG/Water.png", category: "drink" },
-            { id: 16, name: "Jinro", price: 8000, image: "IMG/Jinro.jpg", category: "drink" },
-            { id: 16, name: "Bacchus", price: 8000, image: "IMG/bacchus.jpg", category: "drink" },
+            { id: 1,  name: "ប្រហិតឆឹង",                  price: 10000, image: "IMG/Brorhit.jpg",       category: "food" },
+            { id: 2,  name: "សាច់គោបំពងល្ងរ",              price: 12000, image: "IMG/sachko.jpg",         category: "food" },
+            { id: 3,  name: "សាច់គោឆាក្ដៅ",                price: 12000, image: "IMG/chakdavsachko.jpg",  category: "food" },
+            { id: 4,  name: "គោងៀត",                        price: 15000, image: "IMG/D2ICz.jpg",          category: "food" },
+            { id: 5,  name: "ស្ទេកសាច់គោ",                 price: 20000, image: "IMG/6oLJM.jpg",          category: "food" },
+            { id: 6,  name: "ឆ្អឺងជំនីជ្រូកបំពងរ៉តឌី",    price: 12000, image: "IMG/GbiSt.jpg",          category: "food" },
+            { id: 7,  name: "ឆ្អឹងជំនីជ្រូកឆាជូអែម",       price: 12000, image: "IMG/YlFe3.jpg",          category: "food" },
+            { id: 8,  name: "ឡាបសាច់ជ្រូក",                price: 12000, image: "IMG/gQTkd.jpg",          category: "food" },
+            { id: 9,  name: "គោឡើងភ្នំមួយឈុត",             price: 40000, image: "IMG/fZAcb.jpg",          category: "food" },
+            { id: 10, name: "ឈាមទាសុីឈ័ន",                 price: 12000, image: "IMG/Cxck9.jpg",          category: "food" },
+            { id: 11, name: "គ្រឿងសមុទ្រឆាប្រៃផ្អែម",      price: 20000, image: "IMG/kzGic.jpg",          category: "food" },
+            { id: 13, name: "កូកា",                          price: 2000,  image: "IMG/coca.jpg",           category: "drink" },
+            { id: 14, name: "ស្ទីង",                         price: 2000,  image: "IMG/Sting.jpg",          category: "drink" },
+            { id: 15, name: "ទឹក",                           price: 1000,  image: "IMG/Water.png",          category: "drink" },
+            { id: 16, name: "Jinro",                          price: 8000,  image: "IMG/Jinro.jpg",          category: "drink" },
+            { id: 17, name: "Bacchus",                        price: 8000,  image: "IMG/bacchus.jpg",        category: "drink" },
         ];
 
         let cart = JSON.parse(localStorage.getItem("saomaCart")) || [];
@@ -691,6 +770,33 @@
         let currentFilter = 'all';
         let userLocation = JSON.parse(localStorage.getItem("saomaUserLocation")) || null;
         let pendingLoginCallback = null;
+
+        // ==================== TOAST NOTIFICATION ====================
+        function showToast(productName) {
+            const container = document.getElementById("toast-container");
+
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.innerHTML = `
+                <div class="toast-icon">🛒</div>
+                <div class="toast-body">
+                    <div class="toast-title">Added to Cart!</div>
+                    <div class="toast-msg">${productName}</div>
+                </div>
+                <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
+            `;
+            container.appendChild(toast);
+
+            // Auto-remove after 3 seconds
+            setTimeout(() => removeToast(toast), 3000);
+        }
+
+        function removeToast(toast) {
+            if (!toast || !toast.parentElement) return;
+            toast.classList.add("removing");
+            setTimeout(() => toast.remove(), 350);
+        }
+        // ============================================================
 
         // ==================== Cart Functions ====================
         function saveCart() {
@@ -710,8 +816,9 @@
             if (existing) existing.quantity++;
             else cart.push({ id, quantity: 1 });
             saveCart();
+
             const prod = products.find(p => p.id === id);
-            alert(prod.name + " added to cart!");
+            if (prod) showToast(prod.name);  // ← Toast instead of alert
         }
 
         function changeQuantity(id, delta) {
@@ -734,7 +841,7 @@
             const uid = auth.currentUser.uid;
             const key = `saomaOrders_${uid}`;
             let orders = JSON.parse(localStorage.getItem(key)) || [];
-            order.date = new Date().toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            order.date = new Date().toLocaleString('en-US', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
             order.status = "Completed";
             orders.unshift(order);
             localStorage.setItem(key, JSON.stringify(orders));
@@ -763,11 +870,9 @@
         function renderProducts() {
             const container = document.getElementById("products-grid");
             container.innerHTML = "";
-
             let filtered = products;
             if (currentFilter === 'food') filtered = products.filter(p => p.category === 'food');
             else if (currentFilter === 'drink') filtered = products.filter(p => p.category === 'drink');
-
             filtered.forEach(p => createProductCard(p, container));
         }
 
@@ -813,6 +918,37 @@
             document.getElementById("cart-total").textContent = total.toLocaleString('en-US');
         }
 
+        // ==================== CHECKOUT SUMMARY ====================
+        function renderCheckoutSummary() {
+            const summaryContainer = document.getElementById("checkout-summary-items");
+            summaryContainer.innerHTML = "";
+            let total = 0;
+
+            cart.forEach(item => {
+                const prod = products.find(p => p.id === item.id);
+                if (!prod) return;
+                const subtotal = prod.price * item.quantity;
+                total += subtotal;
+
+                const row = document.createElement("div");
+                row.className = "summary-item";
+                row.innerHTML = `
+                    <div class="summary-item-left">
+                        <img src="${prod.image}" alt="${prod.name}" class="summary-item-img">
+                        <div>
+                            <div class="summary-item-name">${prod.name}</div>
+                            <div class="summary-item-qty">Qty: ${item.quantity} × ៛${prod.price.toLocaleString('en-US')}</div>
+                        </div>
+                    </div>
+                    <div class="summary-item-price">៛${subtotal.toLocaleString('en-US')}</div>
+                `;
+                summaryContainer.appendChild(row);
+            });
+
+            document.getElementById("checkout-summary-total").textContent = total.toLocaleString('en-US');
+        }
+        // =========================================================
+
         function renderSuccess(order) {
             let html = `<strong>Customer:</strong> ${order.name}<br>
                         <strong>Phone:</strong> ${order.phone}<br>`;
@@ -839,6 +975,10 @@
 
             if (pageId === "cart") renderCart();
             if (pageId === "orders") renderOrderHistory();
+            if (pageId === "checkout") {
+                renderCheckoutSummary();
+                setTimeout(initDeliveryMap, 100); // init map after section is visible
+            }
         }
 
         function goHome() {
@@ -853,10 +993,7 @@
         }
 
         function requireLogin(callback) {
-            if (auth.currentUser) {
-                callback();
-                return;
-            }
+            if (auth.currentUser) { callback(); return; }
             pendingLoginCallback = callback;
             document.getElementById("login-modal").style.display = "flex";
         }
@@ -870,10 +1007,6 @@
             }
         }
 
-        // ==================== FIX: Always use signInWithPopup ====================
-        // signInWithRedirect causes page reload which loses all app state (cart, pendingCallback).
-        // signInWithPopup works on all modern mobile browsers (Chrome Android, Safari iOS).
-        // If popup is blocked, we fall back to redirect as a last resort.
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
@@ -885,22 +1018,13 @@
             auth.signInWithPopup(provider)
                 .then((result) => {
                     loadingEl.classList.remove("show");
-                    if (result.user) {
-                        handleLoginSuccess();
-                    }
+                    if (result.user) handleLoginSuccess();
                 })
                 .catch((err) => {
                     loadingEl.classList.remove("show");
-
-                    // If popup was blocked by the browser, fall back to redirect
                     if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
-                        // Save pending action to sessionStorage so it survives the redirect
-                        if (pendingLoginCallback) {
-                            sessionStorage.setItem("saomaAfterLogin", "pending");
-                        }
-                        auth.signInWithRedirect(provider).catch(err2 => {
-                            alert("Login failed: " + err2.message);
-                        });
+                        if (pendingLoginCallback) sessionStorage.setItem("saomaAfterLogin", "pending");
+                        auth.signInWithRedirect(provider).catch(err2 => alert("Login failed: " + err2.message));
                     } else if (err.code !== 'auth/cancelled-popup-request') {
                         alert("Login failed: " + err.message);
                         document.getElementById("login-modal").style.display = "flex";
@@ -908,9 +1032,7 @@
                 });
         }
 
-        function closeLoginModal() {
-            document.getElementById("login-modal").style.display = "none";
-        }
+        function closeLoginModal() { document.getElementById("login-modal").style.display = "none"; }
 
         function updateUserUI(user) {
             const loginBtn = document.getElementById("login-btn");
@@ -922,7 +1044,7 @@
                 loginBtn.classList.add("hidden");
                 if (mobileLoginBtn) mobileLoginBtn.style.display = "none";
                 userInfo.classList.remove("hidden");
-                userInfo.innerHTML = `👤 ${user.displayName || user.email} 
+                userInfo.innerHTML = `👤 ${user.displayName || user.email}
                     <button onclick="auth.signOut()" style="background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.3); padding:6px 14px; border-radius:25px;">Logout</button>`;
 
                 if (mobileUserInfo) {
@@ -940,6 +1062,96 @@
             }
         }
 
+        // ==================== MAP ====================
+        let deliveryMap = null;
+        let deliveryMarker = null;
+
+        function initDeliveryMap() {
+            if (deliveryMap) {
+                deliveryMap.invalidateSize();
+                return;
+            }
+
+            // Default: Phnom Penh, Cambodia
+            const defaultLat = 11.5564;
+            const defaultLng = 104.9282;
+            const startLat = userLocation ? userLocation.lat : defaultLat;
+            const startLng = userLocation ? userLocation.lng : defaultLng;
+
+            deliveryMap = L.map("delivery-map").setView([startLat, startLng], 15);
+
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(deliveryMap);
+
+            // Custom red pin icon
+            const pinIcon = L.divIcon({
+                html: `<div style="
+                    width:36px; height:36px;
+                    background:var(--primary, #ff5722);
+                    border:3px solid white;
+                    border-radius:50% 50% 50% 0;
+                    transform:rotate(-45deg);
+                    box-shadow:0 4px 12px rgba(255,87,34,0.5);
+                "></div>`,
+                iconSize: [36, 36],
+                iconAnchor: [18, 36],
+                className: ""
+            });
+
+            // If existing location, place marker
+            if (userLocation) {
+                deliveryMarker = L.marker([userLocation.lat, userLocation.lng], {
+                    icon: pinIcon,
+                    draggable: true
+                }).addTo(deliveryMap);
+                deliveryMarker.bindPopup("📍 Your delivery location").openPopup();
+                deliveryMarker.on("dragend", (e) => {
+                    const pos = e.target.getLatLng();
+                    updateLocationFromMap(pos.lat, pos.lng);
+                });
+            }
+
+            // Click on map to set/move pin
+            deliveryMap.on("click", (e) => {
+                const { lat, lng } = e.latlng;
+                if (deliveryMarker) {
+                    deliveryMarker.setLatLng([lat, lng]);
+                } else {
+                    deliveryMarker = L.marker([lat, lng], {
+                        icon: pinIcon,
+                        draggable: true
+                    }).addTo(deliveryMap);
+                    deliveryMarker.bindPopup("📍 Your delivery location").openPopup();
+                    deliveryMarker.on("dragend", (ev) => {
+                        const pos = ev.target.getLatLng();
+                        updateLocationFromMap(pos.lat, pos.lng);
+                    });
+                }
+                updateLocationFromMap(lat, lng);
+            });
+        }
+
+        function updateLocationFromMap(lat, lng) {
+            userLocation = { lat, lng };
+            localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
+            document.getElementById("location-display").innerHTML =
+                `✅ Pin placed!<br>
+                 <strong>Lat:</strong> ${lat.toFixed(6)}&nbsp;&nbsp;
+                 <strong>Lng:</strong> ${lng.toFixed(6)}<br>
+                 <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:var(--primary);">🔗 Preview on Google Maps</a>`;
+        }
+
+        function switchMapTab(tab) {
+            document.getElementById("tab-map").classList.toggle("active", tab === "map");
+            document.getElementById("tab-gps").classList.toggle("active", tab === "gps");
+            document.getElementById("panel-map").style.display = tab === "map" ? "block" : "none";
+            document.getElementById("panel-gps").style.display = tab === "gps" ? "block" : "none";
+            if (tab === "map") setTimeout(() => deliveryMap && deliveryMap.invalidateSize(), 100);
+        }
+        // =============================================
+
         function getCurrentLocation() {
             const btn = document.getElementById("get-location-btn");
             btn.textContent = "Getting location...";
@@ -953,16 +1165,32 @@
 
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    userLocation = { lat, lng };
                     localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
-                    document.getElementById("location-display").innerHTML =
-                        `✅ Location captured!<br>
-                         <strong>Lat:</strong> ${userLocation.lat.toFixed(6)}<br>
-                         <strong>Lng:</strong> ${userLocation.lng.toFixed(6)}`;
-                    btn.textContent = "✅ Location Updated";
+                    updateLocationFromMap(lat, lng);
+                    // Also move map pin if map is loaded
+                    if (deliveryMap) {
+                        deliveryMap.setView([lat, lng], 16);
+                        const pinIcon = L.divIcon({
+                            html: `<div style="width:36px;height:36px;background:var(--primary,#ff5722);border:3px solid white;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 4px 12px rgba(255,87,34,0.5);"></div>`,
+                            iconSize: [36, 36], iconAnchor: [18, 36], className: ""
+                        });
+                        if (deliveryMarker) {
+                            deliveryMarker.setLatLng([lat, lng]);
+                        } else {
+                            deliveryMarker = L.marker([lat, lng], { icon: pinIcon, draggable: true }).addTo(deliveryMap);
+                            deliveryMarker.on("dragend", (ev) => {
+                                const pos = ev.target.getLatLng();
+                                updateLocationFromMap(pos.lat, pos.lng);
+                            });
+                        }
+                    }
+                    btn.textContent = "✅ GPS Located";
                     btn.style.backgroundColor = "#4caf50";
                 },
-                (error) => {
+                () => {
                     alert("Failed to get location. Please enable GPS and try again.");
                     resetLocationButton();
                 },
@@ -1004,7 +1232,6 @@
                 message += `👤 អតិថិជន: ${lastOrder.name}\n`;
                 message += `📞 លេខទូរស័ព្ទ: ${lastOrder.phone}\n`;
                 if (lastOrder.note) message += `📝 បន្ថែម: ${lastOrder.note}\n`;
-
                 message += `\n${itemsText}\n`;
                 message += `💰 សរុប: ៛${lastOrder.total.toLocaleString('en-US')}\n`;
                 message += `💳 Paid via ABA QR ✅\n\n`;
@@ -1022,10 +1249,7 @@
                 formData.append("caption", message);
                 formData.append("parse_mode", "HTML");
 
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                    method: "POST",
-                    body: formData
-                });
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: "POST", body: formData });
 
                 saveOrderToHistory(lastOrder);
                 alert("✅ Order sent successfully!");
@@ -1085,7 +1309,6 @@
             renderFeatured();
             renderProducts();
 
-            // Navigation
             document.querySelectorAll(".nav-links a, #mobile-menu a").forEach(link => {
                 link.addEventListener("click", (e) => {
                     const href = link.getAttribute("href");
@@ -1128,12 +1351,7 @@
                         return sum + (p ? p.price * item.quantity : 0);
                     }, 0);
 
-                    lastOrder = {
-                        name, phone, note,
-                        cart: JSON.parse(JSON.stringify(cart)),
-                        total,
-                        location: userLocation
-                    };
+                    lastOrder = { name, phone, note, cart: JSON.parse(JSON.stringify(cart)), total, location: userLocation };
 
                     document.getElementById("qr-amount").innerHTML = `Total: ៛${total.toLocaleString('en-US')}`;
                     document.getElementById("qr-modal").style.display = "flex";
@@ -1151,36 +1369,20 @@
 
             auth.onAuthStateChanged(user => {
                 updateUserUI(user);
-                // Handle post-redirect login (popup-blocked fallback)
                 if (user && sessionStorage.getItem("saomaAfterLogin") === "pending") {
                     sessionStorage.removeItem("saomaAfterLogin");
-                    // User is now logged in after redirect, just close modal
                     closeLoginModal();
                 }
             });
 
-            // Handle redirect result (for popup-blocked fallback only)
             auth.getRedirectResult()
-                .then((result) => {
-                    if (result && result.user) {
-                        closeLoginModal();
-                    }
-                })
-                .catch((error) => {
-                    if (error.code !== 'auth/no-current-user') {
-                        console.warn("Redirect login error:", error);
-                    }
-                });
+                .then((result) => { if (result && result.user) closeLoginModal(); })
+                .catch((error) => { if (error.code !== 'auth/no-current-user') console.warn("Redirect login error:", error); });
 
-            // Restore location if exists
             if (userLocation) {
-                document.getElementById("location-display").innerHTML =
-                    `✅ Location captured!<br>
-                     <strong>Lat:</strong> ${userLocation.lat.toFixed(6)}<br>
-                     <strong>Lng:</strong> ${userLocation.lng.toFixed(6)}`;
+                updateLocationFromMap(userLocation.lat, userLocation.lng);
             }
         });
     </script>
 </body>
-
 </html>
