@@ -379,6 +379,8 @@
             text-align: center;
             max-width: 420px;
             width: 100%;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
         }
 
         footer {
@@ -438,6 +440,33 @@
             margin-top: 1.5rem;
             opacity: 0.8;
         }
+
+        /* Login loading overlay */
+        #login-loading {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            font-size: 1.2rem;
+            gap: 1rem;
+        }
+        #login-loading.show {
+            display: flex;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 
@@ -477,6 +506,12 @@
             </ul>
         </div>
     </header>
+
+    <!-- Login loading overlay -->
+    <div id="login-loading">
+        <div class="spinner"></div>
+        <p>Signing in with Google...</p>
+    </div>
 
     <main>
         <!-- Banner -->
@@ -618,6 +653,7 @@
     </div>
 
     <script>
+        
         // ==================== Firebase ====================
         const firebaseConfig = {
             apiKey: "AIzaSyCMyF3ow0w-KoXGNbgcG6ZsydPFENj8h0E",
@@ -654,11 +690,7 @@
         let lastOrder = null;
         let currentFilter = 'all';
         let userLocation = JSON.parse(localStorage.getItem("saomaUserLocation")) || null;
-
-        function isMobileDevice() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                window.innerWidth <= 768;
-        }
+        let pendingLoginCallback = null;
 
         // ==================== Cart Functions ====================
         function saveCart() {
@@ -821,24 +853,59 @@
         }
 
         function requireLogin(callback) {
-            if (auth.currentUser) callback();
-            else {
-                alert("Please login with Gmail first.");
-                document.getElementById("login-modal").style.display = "flex";
+            if (auth.currentUser) {
+                callback();
+                return;
+            }
+            pendingLoginCallback = callback;
+            document.getElementById("login-modal").style.display = "flex";
+        }
+
+        function handleLoginSuccess() {
+            closeLoginModal();
+            if (pendingLoginCallback) {
+                const callback = pendingLoginCallback;
+                pendingLoginCallback = null;
+                callback();
             }
         }
 
+        // ==================== FIX: Always use signInWithPopup ====================
+        // signInWithRedirect causes page reload which loses all app state (cart, pendingCallback).
+        // signInWithPopup works on all modern mobile browsers (Chrome Android, Safari iOS).
+        // If popup is blocked, we fall back to redirect as a last resort.
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
 
-            if (isMobileDevice()) {
-                auth.signInWithRedirect(provider).catch(err => alert("Login failed: " + err.message));
-            } else {
-                auth.signInWithPopup(provider)
-                    .then(() => closeLoginModal())
-                    .catch(err => alert("Login failed: " + err.message));
-            }
+            const loadingEl = document.getElementById("login-loading");
+            loadingEl.classList.add("show");
+            closeLoginModal();
+
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    loadingEl.classList.remove("show");
+                    if (result.user) {
+                        handleLoginSuccess();
+                    }
+                })
+                .catch((err) => {
+                    loadingEl.classList.remove("show");
+
+                    // If popup was blocked by the browser, fall back to redirect
+                    if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
+                        // Save pending action to sessionStorage so it survives the redirect
+                        if (pendingLoginCallback) {
+                            sessionStorage.setItem("saomaAfterLogin", "pending");
+                        }
+                        auth.signInWithRedirect(provider).catch(err2 => {
+                            alert("Login failed: " + err2.message);
+                        });
+                    } else if (err.code !== 'auth/cancelled-popup-request') {
+                        alert("Login failed: " + err.message);
+                        document.getElementById("login-modal").style.display = "flex";
+                    }
+                });
         }
 
         function closeLoginModal() {
@@ -858,7 +925,6 @@
                 userInfo.innerHTML = `👤 ${user.displayName || user.email} 
                     <button onclick="auth.signOut()" style="background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.3); padding:6px 14px; border-radius:25px;">Logout</button>`;
 
-                // Mobile user info
                 if (mobileUserInfo) {
                     mobileUserInfo.classList.remove("hidden");
                     mobileUserInfo.innerHTML = `<div style="padding:10px 0; border-top:1px solid rgba(255,255,255,0.2); margin-top:10px;">
@@ -943,7 +1009,6 @@
                 message += `💰 សរុប: ៛${lastOrder.total.toLocaleString('en-US')}\n`;
                 message += `💳 Paid via ABA QR ✅\n\n`;
 
-                // Fixed Location with clickable map link
                 if (lastOrder.location) {
                     const { lat, lng } = lastOrder.location;
                     message += `📍 <b>ទីតាំងដឹកជញ្ជូន:</b>\n`;
@@ -1084,7 +1149,28 @@
             document.getElementById("mobile-login-btn").addEventListener("click", () => document.getElementById("login-modal").style.display = "flex");
             document.getElementById("get-location-btn").addEventListener("click", getCurrentLocation);
 
-            auth.onAuthStateChanged(updateUserUI);
+            auth.onAuthStateChanged(user => {
+                updateUserUI(user);
+                // Handle post-redirect login (popup-blocked fallback)
+                if (user && sessionStorage.getItem("saomaAfterLogin") === "pending") {
+                    sessionStorage.removeItem("saomaAfterLogin");
+                    // User is now logged in after redirect, just close modal
+                    closeLoginModal();
+                }
+            });
+
+            // Handle redirect result (for popup-blocked fallback only)
+            auth.getRedirectResult()
+                .then((result) => {
+                    if (result && result.user) {
+                        closeLoginModal();
+                    }
+                })
+                .catch((error) => {
+                    if (error.code !== 'auth/no-current-user') {
+                        console.warn("Redirect login error:", error);
+                    }
+                });
 
             // Restore location if exists
             if (userLocation) {
