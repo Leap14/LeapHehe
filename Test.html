@@ -404,6 +404,12 @@
             justify-content: center;
             z-index: 3000;
             padding: 1rem;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
@@ -412,9 +418,10 @@
             border-radius: 20px;
             text-align: center;
             max-width: 420px;
-            width: 100%;
-            max-height: calc(100vh - 2rem);
+            width: calc(100% - 2rem);
+            max-height: calc(100dvh - 2rem);
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         footer {
@@ -502,7 +509,6 @@
             font-style: italic;
         }
 
-        /* Admin bypass */
         .admin-bypass {
             margin-top: 2rem;
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -585,8 +591,8 @@
             20%, 60% { transform: translateX(-6px); }
             40%, 80% { transform: translateX(6px); }
         }
-        /* ========================================================= */
 
+        /* ===================== LOGIN LOADING ===================== */
         #login-loading {
             display: none;
             position: fixed;
@@ -610,9 +616,7 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ===================== MAP STYLES 2026 ===================== */
-
-        /* GPS quick-action button */
+        /* ===================== MAP STYLES ===================== */
         .gps-quick-btn {
             width: 100%;
             padding: 16px;
@@ -638,22 +642,10 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255,87,34,0.3);
         }
-        .gps-quick-btn.loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        .gps-quick-btn.success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-color: #a5d6a7;
-            border-style: solid;
-        }
+        .gps-quick-btn.loading { opacity: 0.7; pointer-events: none; }
+        .gps-quick-btn.success { background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; border-style: solid; }
 
-        /* Search bar */
-        .map-search-wrap {
-            position: relative;
-            margin-bottom: 10px;
-        }
+        .map-search-wrap { position: relative; margin-bottom: 10px; }
         .map-search-wrap input {
             padding: 13px 16px 13px 44px;
             border-radius: 12px;
@@ -662,10 +654,7 @@
             margin: 0;
             transition: border-color 0.2s;
         }
-        .map-search-wrap input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
+        .map-search-wrap input:focus { border-color: var(--primary); outline: none; }
         .map-search-icon {
             position: absolute;
             left: 14px;
@@ -704,7 +693,6 @@
         .search-result-item .sri-name { font-weight: 600; color: #1a1a1a; }
         .search-result-item .sri-detail { font-size: 0.8rem; color: #888; margin-top: 2px; }
 
-        /* Map container */
         .map-wrapper {
             position: relative;
             border-radius: 16px;
@@ -712,12 +700,8 @@
             border: 2px solid #ffccbc;
             box-shadow: 0 6px 24px rgba(0,0,0,0.1);
         }
-        #delivery-map {
-            width: 100%;
-            height: 360px;
-        }
+        #delivery-map { width: 100%; height: 360px; }
 
-        /* Center crosshair pin — stays fixed while map moves */
         .map-center-pin {
             position: absolute;
             top: 50%;
@@ -730,12 +714,9 @@
             align-items: center;
             transition: transform 0.15s;
         }
-        .map-center-pin.dragging {
-            transform: translate(-50%, -115%) scale(1.15);
-        }
+        .map-center-pin.dragging { transform: translate(-50%, -115%) scale(1.15); }
         .map-center-pin .pin-head {
-            width: 34px;
-            height: 34px;
+            width: 34px; height: 34px;
             background: var(--primary);
             border: 3px solid white;
             border-radius: 50% 50% 50% 0;
@@ -743,29 +724,21 @@
             box-shadow: 0 4px 14px rgba(255,87,34,0.55);
         }
         .map-center-pin .pin-shadow {
-            width: 16px;
-            height: 6px;
+            width: 16px; height: 6px;
             background: rgba(0,0,0,0.18);
             border-radius: 50%;
             margin-top: 2px;
             transition: all 0.15s;
         }
-        .map-center-pin.dragging .pin-shadow {
-            width: 20px;
-            opacity: 0.5;
-        }
+        .map-center-pin.dragging .pin-shadow { width: 20px; opacity: 0.5; }
 
-        /* Ripple on confirm */
         @keyframes pinRipple {
             0% { box-shadow: 0 0 0 0 rgba(255,87,34,0.5); }
             70% { box-shadow: 0 0 0 18px rgba(255,87,34,0); }
             100% { box-shadow: 0 0 0 0 rgba(255,87,34,0); }
         }
-        .map-center-pin.confirmed .pin-head {
-            animation: pinRipple 0.7s ease-out;
-        }
+        .map-center-pin.confirmed .pin-head { animation: pinRipple 0.7s ease-out; }
 
-        /* "Drag map to move pin" hint overlay */
         .map-drag-hint {
             position: absolute;
             bottom: 14px;
@@ -785,7 +758,6 @@
         }
         .map-drag-hint.hide { opacity: 0; }
 
-        /* Confirm pin button inside map */
         .map-confirm-btn {
             position: absolute;
             bottom: 52px;
@@ -808,7 +780,6 @@
         .map-confirm-btn.visible { display: block; }
         .map-confirm-btn:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 10px 28px rgba(255,87,34,0.5); }
 
-        /* Location confirmed card */
         #location-display {
             font-size: 0.95rem;
             color: #555;
@@ -819,20 +790,9 @@
             transition: all 0.35s;
             border: 1.5px solid transparent;
         }
-        #location-display.confirmed {
-            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-            border-color: #a5d6a7;
-        }
-        .loc-card {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-        .loc-card-icon {
-            font-size: 1.6rem;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
+        #location-display.confirmed { background: linear-gradient(135deg, #e8f5e9, #f1f8e9); border-color: #a5d6a7; }
+        .loc-card { display: flex; gap: 12px; align-items: flex-start; }
+        .loc-card-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
         .loc-card-body { flex: 1; }
         .loc-card-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #888; }
         .loc-card-address { font-weight: 700; color: #1a1a1a; margin: 3px 0 6px; font-size: 1rem; line-height: 1.4; }
@@ -848,15 +808,7 @@
             text-decoration: none;
         }
         .loc-card-link:hover { text-decoration: underline; }
-
-        /* Geocoding loading spinner in card */
-        .loc-geocoding {
-            color: #888;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .loc-geocoding { color: #888; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
         .loc-spinner {
             width: 16px; height: 16px;
             border: 2px solid #ddd;
@@ -865,7 +817,6 @@
             animation: spin 0.7s linear infinite;
             flex-shrink: 0;
         }
-        /* ========================================================== */
     </style>
 </head>
 
@@ -885,13 +836,12 @@
             <div id="current-time"></div>
             <div id="countdown-msg"></div>
 
-            <!-- Admin bypass -->
             <div class="admin-bypass">
                 <button class="admin-bypass-toggle" onclick="toggleBypassForm()">&#128272; Admin Access</button>
                 <div class="admin-bypass-form" id="bypass-form">
                     <div class="bypass-input-wrap">
                         <input type="password" id="bypass-password" placeholder="Enter password" maxlength="30"
-                            onkeydown="if(event.key===&#39;Enter&#39;) checkBypassPassword()">
+                            onkeydown="if(event.key==='Enter') checkBypassPassword()">
                         <button id="bypass-btn" onclick="checkBypassPassword()">Unlock</button>
                     </div>
                     <div id="bypass-error">&#10060; Wrong password. Try again.</div>
@@ -899,7 +849,6 @@
             </div>
         </div>
     </div>
-    <!-- ========================================================= -->
 
     <header>
         <nav class="navbar">
@@ -936,7 +885,7 @@
 
     <div id="login-loading">
         <div class="spinner"></div>
-        <p>Signing in with Google...</p>
+        <p id="login-loading-msg">Signing in with Google...</p>
     </div>
 
     <main>
@@ -979,7 +928,6 @@
             <div class="cart-container">
                 <h2>Checkout</h2>
 
-                <!-- ✅ ORDER SUMMARY -->
                 <div class="order-summary-box" id="checkout-summary">
                     <h3>🛒 Your Order</h3>
                     <div id="checkout-summary-items"></div>
@@ -1005,7 +953,6 @@
                         <label style="font-weight:700; font-size:1rem;">📍 Delivery Location <span style="color:red;">*</span></label>
                         <p style="font-size:0.85rem; color:#888; margin:4px 0 14px;">We need your location to deliver to you</p>
 
-                        <!-- ① One-tap GPS button -->
                         <button type="button" id="gps-quick-btn" class="gps-quick-btn" onclick="doGpsQuick()">
                             <span id="gps-btn-icon">📍</span>
                             <span id="gps-btn-text">Use My Current Location (Recommended)</span>
@@ -1017,30 +964,24 @@
                             <div style="flex:1; height:1px; background:#eee;"></div>
                         </div>
 
-                        <!-- ② Search bar -->
                         <div class="map-search-wrap">
                             <span class="map-search-icon">🔍</span>
                             <input type="text" id="map-search-input" placeholder="Search street, landmark, area..." autocomplete="off">
                             <div class="map-search-results" id="map-search-results"></div>
                         </div>
 
-                        <!-- ③ Map with center-pin -->
                         <div class="map-wrapper" id="map-wrapper">
                             <div id="delivery-map"></div>
-                            <!-- Fixed crosshair pin -->
                             <div class="map-center-pin" id="map-center-pin">
                                 <div class="pin-head"></div>
                                 <div class="pin-shadow"></div>
                             </div>
-                            <!-- Drag hint -->
                             <div class="map-drag-hint" id="map-drag-hint">👆 Drag map to move pin</div>
-                            <!-- Confirm button -->
                             <button type="button" class="map-confirm-btn" id="map-confirm-btn" onclick="confirmMapPin()">
                                 ✅ Confirm This Location
                             </button>
                         </div>
 
-                        <!-- ④ Confirmed location card -->
                         <div id="location-display">
                             <span style="color:#bbb; font-size:0.9rem;">No location selected yet — use GPS or drag the map above.</span>
                         </div>
@@ -1096,11 +1037,15 @@
         </div>
     </div>
 
+    <!-- ===================== LOGIN MODAL ===================== -->
     <div id="login-modal" class="modal">
         <div class="modal-content">
             <h2>Sign in with Gmail</h2>
-            <p>Fast & Secure</p>
-            <button onclick="signInWithGoogle()" class="btn" style="background:#4285f4; width:100%; margin:15px 0;">Continue with Google</button>
+            <p style="color:#888; margin-bottom:1rem;">Fast &amp; Secure login with your Google account</p>
+            <button id="google-signin-btn" class="btn" style="background:#4285f4; width:100%; margin:15px 0; padding:1.1rem; font-size:1.05rem; display:flex; align-items:center; justify-content:center; gap:10px;">
+                <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#fff" d="M44.5 20H24v8h11.7C34.2 33.6 29.6 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 6 1.1 8.2 3l5.7-5.7C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21c10.9 0 20-7.9 20-21 0-1.3-.1-2.7-.5-4z"/></svg>
+                Continue with Google
+            </button>
             <button onclick="closeLoginModal()" class="btn" style="background:#666; width:100%;">Cancel</button>
         </div>
     </div>
@@ -1108,27 +1053,21 @@
     <script>
         // ==================== OPENING HOURS CHECK (Cambodia Time UTC+7) ====================
         function checkOpeningHours() {
-            // If admin already bypassed this session, skip the check
             if (sessionStorage.getItem("saomaBypass") === "1") return;
 
-            // Get Cambodia local time (UTC+7)
             const now = new Date();
-            const cambodiaOffset = 7 * 60; // minutes
+            const cambodiaOffset = 7 * 60;
             const utcMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
             const cambodiaMinutes = (utcMinutes + cambodiaOffset) % (24 * 60);
             const cambodiaHour = Math.floor(cambodiaMinutes / 60);
             const cambodiaMin = cambodiaMinutes % 60;
 
-            // Open: 18:00 (6 PM) to 03:00 (3 AM) next day
-            // That means: open if hour >= 18 OR hour < 3
             const isOpen = cambodiaHour >= 18 || cambodiaHour < 3;
-
             const notice = document.getElementById("closed-notice");
 
             if (!isOpen) {
                 notice.classList.add("show");
                 updateClosedClock(cambodiaHour, cambodiaMin, cambodiaMinutes);
-                // Update clock every minute
                 setInterval(() => {
                     const n = new Date();
                     const um = n.getUTCHours() * 60 + n.getUTCMinutes();
@@ -1146,22 +1085,17 @@
             const mm = String(min).padStart(2, "0");
             document.getElementById("current-time").textContent =
                 `⏰ Current time in Cambodia: ${h12}:${mm} ${ampm}`;
-
-            // Calculate minutes until 6 PM (18:00 = 1080 min)
-            const openMin = 18 * 60; // 1080
+            const openMin = 18 * 60;
             let waitMin = openMin - totalMin;
-            if (waitMin < 0) waitMin += 24 * 60; // shouldn't happen since we're only here when closed
-
+            if (waitMin < 0) waitMin += 24 * 60;
             const waitH = Math.floor(waitMin / 60);
             const waitM = waitMin % 60;
             document.getElementById("countdown-msg").textContent =
                 `Opens in ${waitH > 0 ? waitH + "h " : ""}${waitM}m`;
         }
-        // ==================================================================================
-
 
         // ==================== ADMIN BYPASS ====================
-        const ADMIN_PASSWORD = "saoma2026";  // Change this password!
+        const ADMIN_PASSWORD = "saoma2026";
 
         function toggleBypassForm() {
             const form = document.getElementById("bypass-form");
@@ -1175,21 +1109,19 @@
             const input = document.getElementById("bypass-password").value;
             const errorEl = document.getElementById("bypass-error");
             if (input === ADMIN_PASSWORD) {
-                // Hide closed notice and allow access
                 document.getElementById("closed-notice").classList.remove("show");
                 document.getElementById("closed-notice").style.display = "none";
                 sessionStorage.setItem("saomaBypass", "1");
             } else {
                 errorEl.style.display = "block";
                 errorEl.style.animation = "none";
-                void errorEl.offsetWidth; // reflow to restart animation
+                void errorEl.offsetWidth;
                 errorEl.style.animation = "shake 0.4s ease";
                 document.getElementById("bypass-password").value = "";
                 document.getElementById("bypass-password").focus();
                 setTimeout(() => { errorEl.style.display = "none"; }, 3000);
             }
         }
-        // ======================================================
 
         // ==================== Firebase ====================
         const firebaseConfig = {
@@ -1229,7 +1161,21 @@
         let userLocation = JSON.parse(localStorage.getItem("saomaUserLocation")) || null;
         let pendingLoginCallback = null;
 
-        // ==================== TOAST NOTIFICATION ====================
+        // ==================== HELPERS ====================
+        function isMobile() {
+            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent)
+                || window.innerWidth < 768;
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add("active");
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove("active");
+        }
+
+        // ==================== TOAST ====================
         function showToast(productName) {
             const container = document.getElementById("toast-container");
             const toast = document.createElement("div");
@@ -1251,9 +1197,8 @@
             toast.classList.add("removing");
             setTimeout(() => toast.remove(), 350);
         }
-        // ============================================================
 
-        // ==================== Cart Functions ====================
+        // ==================== Cart ====================
         function saveCart() {
             localStorage.setItem("saomaCart", JSON.stringify(cart));
             updateCartCount();
@@ -1301,7 +1246,7 @@
             localStorage.setItem(key, JSON.stringify(orders));
         }
 
-        // ==================== Render Functions ====================
+        // ==================== Render ====================
         function createProductCard(p, container) {
             const card = document.createElement("div");
             card.className = "product-card";
@@ -1346,7 +1291,6 @@
                 document.getElementById("cart-total").textContent = "0";
                 return;
             }
-
             let total = 0;
             cart.forEach(item => {
                 const prod = products.find(p => p.id === item.id);
@@ -1372,18 +1316,15 @@
             document.getElementById("cart-total").textContent = total.toLocaleString('en-US');
         }
 
-        // ==================== CHECKOUT SUMMARY ====================
         function renderCheckoutSummary() {
             const summaryContainer = document.getElementById("checkout-summary-items");
             summaryContainer.innerHTML = "";
             let total = 0;
-
             cart.forEach(item => {
                 const prod = products.find(p => p.id === item.id);
                 if (!prod) return;
                 const subtotal = prod.price * item.quantity;
                 total += subtotal;
-
                 const row = document.createElement("div");
                 row.className = "summary-item";
                 row.innerHTML = `
@@ -1398,10 +1339,8 @@
                 `;
                 summaryContainer.appendChild(row);
             });
-
             document.getElementById("checkout-summary-total").textContent = total.toLocaleString('en-US');
         }
-        // =========================================================
 
         function renderSuccess(order) {
             let html = `<strong>Customer:</strong> ${order.name}<br>
@@ -1423,10 +1362,9 @@
         }
 
         function showPage(pageId) {
-            document.querySelectorAll("main > section").forEach(section => section.classList.add("hidden"));
+            document.querySelectorAll("main > section").forEach(s => s.classList.add("hidden"));
             const target = document.getElementById(pageId);
             if (target) target.classList.remove("hidden");
-
             if (pageId === "cart") renderCart();
             if (pageId === "orders") renderOrderHistory();
             if (pageId === "checkout") {
@@ -1449,11 +1387,11 @@
         function requireLogin(callback) {
             if (auth.currentUser) { callback(); return; }
             pendingLoginCallback = callback;
-            document.getElementById("login-modal").style.display = "flex";
+            openModal("login-modal");
         }
 
         function handleLoginSuccess() {
-            closeLoginModal();
+            closeModal("login-modal");
             if (pendingLoginCallback) {
                 const callback = pendingLoginCallback;
                 pendingLoginCallback = null;
@@ -1461,32 +1399,76 @@
             }
         }
 
+        // ==================== FIXED GOOGLE SIGN-IN ====================
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
-
             const loadingEl = document.getElementById("login-loading");
-            loadingEl.classList.add("show");
-            closeLoginModal();
+            const loadingMsg = document.getElementById("login-loading-msg");
 
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    loadingEl.classList.remove("show");
-                    if (result.user) handleLoginSuccess();
-                })
-                .catch((err) => {
-                    loadingEl.classList.remove("show");
-                    if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
-                        if (pendingLoginCallback) sessionStorage.setItem("saomaAfterLogin", "pending");
-                        auth.signInWithRedirect(provider).catch(err2 => alert("Login failed: " + err2.message));
-                    } else if (err.code !== 'auth/cancelled-popup-request') {
+            // Always close the modal first before any redirect/popup
+            closeModal("login-modal");
+
+            // Save the pending action so we can restore it after redirect
+            if (pendingLoginCallback) {
+                sessionStorage.setItem("saomaAfterLogin", "pending");
+            }
+
+            if (isMobile()) {
+                // ── MOBILE: use redirect (popup is blocked by all mobile browsers) ──
+                loadingMsg.textContent = "Redirecting to Google...";
+                loadingEl.classList.add("show");
+
+                // Small delay so the loading screen renders before the redirect fires
+                setTimeout(() => {
+                    auth.signInWithRedirect(provider).catch(err => {
+                        loadingEl.classList.remove("show");
+                        sessionStorage.removeItem("saomaAfterLogin");
                         alert("Login failed: " + err.message);
-                        document.getElementById("login-modal").style.display = "flex";
-                    }
-                });
+                    });
+                }, 150);
+
+            } else {
+                // ── DESKTOP: try popup, fall back to redirect if blocked ──
+                loadingMsg.textContent = "Signing in with Google...";
+                loadingEl.classList.add("show");
+
+                auth.signInWithPopup(provider)
+                    .then(result => {
+                        loadingEl.classList.remove("show");
+                        if (result.user) handleLoginSuccess();
+                    })
+                    .catch(err => {
+                        if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
+                            // Fall back to redirect on desktop too
+                            loadingMsg.textContent = "Redirecting to Google...";
+                            auth.signInWithRedirect(provider).catch(err2 => {
+                                loadingEl.classList.remove("show");
+                                sessionStorage.removeItem("saomaAfterLogin");
+                                alert("Login failed: " + err2.message);
+                            });
+                        } else if (err.code === 'auth/cancelled-popup-request') {
+                            loadingEl.classList.remove("show");
+                        } else {
+                            loadingEl.classList.remove("show");
+                            alert("Login failed: " + err.message);
+                            openModal("login-modal");
+                        }
+                    });
+            }
         }
 
-        function closeLoginModal() { document.getElementById("login-modal").style.display = "none"; }
+        function closeLoginModal() {
+            closeModal("login-modal");
+            pendingLoginCallback = null;
+            sessionStorage.removeItem("saomaAfterLogin");
+        }
+
+        function closeQRModal() {
+            closeModal("qr-modal");
+            document.getElementById("payment-proof").value = "";
+            document.getElementById("confirm-payment-btn").disabled = true;
+        }
 
         function updateUserUI(user) {
             const loginBtn = document.getElementById("login-btn");
@@ -1499,8 +1481,7 @@
                 if (mobileLoginBtn) mobileLoginBtn.style.display = "none";
                 userInfo.classList.remove("hidden");
                 userInfo.innerHTML = `👤 ${user.displayName || user.email}
-                    <button onclick="auth.signOut()" style="background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.3); padding:6px 14px; border-radius:25px;">Logout</button>`;
-
+                    <button onclick="auth.signOut()" style="background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.3); padding:6px 14px; border-radius:25px; cursor:pointer;">Logout</button>`;
                 if (mobileUserInfo) {
                     mobileUserInfo.classList.remove("hidden");
                     mobileUserInfo.innerHTML = `<div style="padding:10px 0; border-top:1px solid rgba(255,255,255,0.2); margin-top:10px;">
@@ -1516,69 +1497,55 @@
             }
         }
 
-        // ==================== MAP 2026 ====================
+        // ==================== MAP ====================
         let deliveryMap = null;
         let searchDebounce = null;
         let geocodeDebounce = null;
-        let mapMoved = false;   // track if user has moved map
-        let lastGeocode = null; // cached address
+        let lastGeocode = null;
 
         function initDeliveryMap() {
             if (deliveryMap) { deliveryMap.invalidateSize(); return; }
-
-            const defaultLat = 11.5564;
-            const defaultLng = 104.9282;
+            const defaultLat = 11.5564, defaultLng = 104.9282;
             const startLat = userLocation ? userLocation.lat : defaultLat;
             const startLng = userLocation ? userLocation.lng : defaultLng;
 
             deliveryMap = L.map("delivery-map", { zoomControl: true, attributionControl: false })
                 .setView([startLat, startLng], 16);
-
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(deliveryMap);
-
-            // Attribution tucked small
             L.control.attribution({ prefix: false, position: 'bottomleft' }).addTo(deliveryMap);
 
             const pin = document.getElementById("map-center-pin");
             const hint = document.getElementById("map-drag-hint");
             const confirmBtn = document.getElementById("map-confirm-btn");
 
-            // Show confirm button + animate pin while dragging
             deliveryMap.on("movestart", () => {
                 pin.classList.add("dragging");
                 pin.classList.remove("confirmed");
                 hint.classList.add("hide");
                 confirmBtn.classList.add("visible");
-                mapMoved = true;
             });
 
             deliveryMap.on("moveend", () => {
                 pin.classList.remove("dragging");
                 const center = deliveryMap.getCenter();
-                // Show geocoding state
                 showGeocodingCard(center.lat, center.lng);
             });
 
-            // If we have a saved location, show it confirmed right away
             if (userLocation) {
                 showConfirmedCard(userLocation.lat, userLocation.lng, null);
                 confirmBtn.classList.add("visible");
             } else {
-                // First open: show hint
                 setTimeout(() => hint.classList.add("hide"), 4000);
             }
 
-            // Search bar
             const searchInput = document.getElementById("map-search-input");
             const searchResults = document.getElementById("map-search-results");
-
             searchInput.addEventListener("input", () => {
                 const q = searchInput.value.trim();
                 clearTimeout(searchDebounce);
                 if (q.length < 3) { searchResults.classList.remove("open"); return; }
                 searchDebounce = setTimeout(() => doMapSearch(q), 450);
             });
-
             searchInput.addEventListener("blur", () => {
                 setTimeout(() => searchResults.classList.remove("open"), 200);
             });
@@ -1625,8 +1592,7 @@
             const lat = center.lat, lng = center.lng;
             userLocation = { lat, lng };
             localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
-            const pin = document.getElementById("map-center-pin");
-            pin.classList.add("confirmed");
+            document.getElementById("map-center-pin").classList.add("confirmed");
             if (lastGeocode) {
                 showConfirmedCard(lat, lng, lastGeocode);
             } else {
@@ -1667,7 +1633,6 @@
             } catch(e) { callback(null); }
         }
 
-        // One-tap GPS
         function doGpsQuick() {
             const btn = document.getElementById("gps-quick-btn");
             const icon = document.getElementById("gps-btn-icon");
@@ -1676,18 +1641,15 @@
             btn.classList.add("loading");
             icon.textContent = "⏳";
             txt.textContent = "Getting your location...";
-
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
+                    const lat = pos.coords.latitude, lng = pos.coords.longitude;
                     userLocation = { lat, lng };
                     localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
                     btn.classList.remove("loading");
                     btn.classList.add("success");
                     icon.textContent = "✅";
                     txt.textContent = "Location found!";
-                    // Move map
                     if (deliveryMap) {
                         deliveryMap.setView([lat, lng], 17);
                         document.getElementById("map-confirm-btn").classList.add("visible");
@@ -1708,16 +1670,7 @@
             );
         }
 
-        // Legacy stubs (kept so nothing breaks)
-        function switchMapTab() {}
         function getCurrentLocation() { doGpsQuick(); }
-        function resetLocationButton() {}
-
-        function closeQRModal() {
-            document.getElementById("qr-modal").style.display = "none";
-            document.getElementById("payment-proof").value = "";
-            document.getElementById("confirm-payment-btn").disabled = true;
-        }
 
         async function confirmPayment() {
             const file = document.getElementById("payment-proof").files[0];
@@ -1730,7 +1683,6 @@
             try {
                 const user = auth.currentUser;
                 const userLine = user ? `\n👤 Logged in: ${user.email}` : "";
-
                 const itemsText = lastOrder.cart.map(item => {
                     const p = products.find(pr => pr.id === item.id);
                     return `• ${p ? p.name : "Unknown"} × ${item.quantity} = ៛${(p.price * item.quantity).toLocaleString('en-US')}`;
@@ -1743,7 +1695,6 @@
                 message += `\n${itemsText}\n`;
                 message += `💰 សរុប: ៛${lastOrder.total.toLocaleString('en-US')}\n`;
                 message += `💳 Paid via ABA QR ✅\n\n`;
-
                 if (lastOrder.location) {
                     const { lat, lng } = lastOrder.location;
                     message += `📍 <b>ទីតាំងដឹកជញ្ជូន:</b>\n`;
@@ -1756,7 +1707,6 @@
                 formData.append("photo", file);
                 formData.append("caption", message);
                 formData.append("parse_mode", "HTML");
-
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: "POST", body: formData });
 
                 saveOrderToHistory(lastOrder);
@@ -1766,7 +1716,6 @@
                 saveCart();
                 showPage("success");
                 renderSuccess(lastOrder);
-
             } catch (err) {
                 console.error(err);
                 alert("Failed to send. Please try again or contact admin.");
@@ -1776,27 +1725,22 @@
         function renderOrderHistory() {
             const container = document.getElementById("orders-list");
             container.innerHTML = "";
-
             if (!auth.currentUser) {
                 container.innerHTML = `<p style="text-align:center; padding:3rem;">Please login to view your orders.</p>`;
                 return;
             }
-
             const uid = auth.currentUser.uid;
             const key = `saomaOrders_${uid}`;
             let orders = JSON.parse(localStorage.getItem(key)) || [];
-
             if (orders.length === 0) {
                 container.innerHTML = `<p style="text-align:center; padding:3rem;">You haven't placed any orders yet.</p>`;
                 return;
             }
-
             orders.forEach(order => {
                 let itemsHtml = order.cart.map(item => {
                     const p = products.find(pr => pr.id === item.id);
                     return `• ${p ? p.name : "Unknown"} × ${item.quantity}`;
                 }).join("<br>");
-
                 const div = document.createElement("div");
                 div.className = "cart-container";
                 div.style.marginBottom = "1.5rem";
@@ -1813,15 +1757,50 @@
 
         // ==================== Initialize ====================
         document.addEventListener("DOMContentLoaded", () => {
-            // ✅ Check opening hours first
             checkOpeningHours();
-
             updateCartCount();
             renderFeatured();
             renderProducts();
 
+            // ── Handle Google redirect result FIRST (fires on page load after redirect) ──
+            auth.getRedirectResult()
+                .then(result => {
+                    const loadingEl = document.getElementById("login-loading");
+                    loadingEl.classList.remove("show"); // Always hide loading on return
+
+                    if (result && result.user) {
+                        updateUserUI(result.user);
+                        closeModal("login-modal");
+
+                        // Restore what the user was doing before login
+                        if (sessionStorage.getItem("saomaAfterLogin") === "pending") {
+                            sessionStorage.removeItem("saomaAfterLogin");
+                            if (pendingLoginCallback) {
+                                const cb = pendingLoginCallback;
+                                pendingLoginCallback = null;
+                                cb();
+                            } else {
+                                showPage("cart");
+                            }
+                        }
+                    }
+                })
+                .catch(err => {
+                    document.getElementById("login-loading").classList.remove("show");
+                    sessionStorage.removeItem("saomaAfterLogin");
+                    if (err.code && err.code !== 'auth/no-current-user') {
+                        console.warn("Redirect login error:", err.code, err.message);
+                    }
+                });
+
+            // ── Auth state observer ──
+            auth.onAuthStateChanged(user => {
+                updateUserUI(user);
+            });
+
+            // ── Nav links ──
             document.querySelectorAll(".nav-links a, #mobile-menu a").forEach(link => {
-                link.addEventListener("click", (e) => {
+                link.addEventListener("click", e => {
                     const href = link.getAttribute("href");
                     if (href === "#cart" || href === "#orders") {
                         e.preventDefault();
@@ -1853,7 +1832,6 @@
                     const name = document.getElementById("name").value.trim();
                     const phone = document.getElementById("phone").value.trim();
                     const note = document.getElementById("note").value.trim();
-
                     if (!name || !phone) return alert("Name and phone are required.");
                     if (!userLocation) return alert("Please pin your delivery location on the map first!");
 
@@ -1863,9 +1841,8 @@
                     }, 0);
 
                     lastOrder = { name, phone, note, cart: JSON.parse(JSON.stringify(cart)), total, location: userLocation };
-
                     document.getElementById("qr-amount").innerHTML = `Total: ៛${total.toLocaleString('en-US')}`;
-                    document.getElementById("qr-modal").style.display = "flex";
+                    openModal("qr-modal");
                 });
             });
 
@@ -1874,25 +1851,13 @@
             });
 
             document.getElementById("confirm-payment-btn").addEventListener("click", confirmPayment);
-            document.getElementById("login-btn").addEventListener("click", () => document.getElementById("login-modal").style.display = "flex");
-            document.getElementById("mobile-login-btn").addEventListener("click", () => document.getElementById("login-modal").style.display = "flex");
-            document.getElementById("get-location-btn").addEventListener("click", getCurrentLocation);
 
-            auth.onAuthStateChanged(user => {
-                updateUserUI(user);
-                if (user && sessionStorage.getItem("saomaAfterLogin") === "pending") {
-                    sessionStorage.removeItem("saomaAfterLogin");
-                    closeLoginModal();
-                }
-            });
+            // ── Login buttons ──
+            document.getElementById("login-btn").addEventListener("click", () => openModal("login-modal"));
+            document.getElementById("mobile-login-btn").addEventListener("click", () => openModal("login-modal"));
 
-            auth.getRedirectResult()
-                .then((result) => { if (result && result.user) closeLoginModal(); })
-                .catch((error) => { if (error.code !== 'auth/no-current-user') console.warn("Redirect login error:", error); });
-
-            if (userLocation) {
-                updateLocationFromMap(userLocation.lat, userLocation.lng, false);
-            }
+            // ── Google sign-in button (wired up here, not inline) ──
+            document.getElementById("google-signin-btn").addEventListener("click", signInWithGoogle);
         });
     </script>
 </body>

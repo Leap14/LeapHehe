@@ -432,11 +432,10 @@
             .hamburger { display: block; }
         }
 
-        /* ===================== CLOSED NOTICE ===================== */
         #closed-notice {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, #1a1a1a, #2d1a0e);
+            background: linear-gradient(135deg, #1a1a1a, #3a3a3a);
             color: white;
             display: none;
             align-items: center;
@@ -446,146 +445,10 @@
             padding: 2rem;
         }
 
-        #closed-notice.show { display: flex; }
-
         .closed-content { max-width: 500px; }
-
-        .closed-emoji {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        .closed-content h1 {
-            font-size: clamp(2rem, 7vw, 3rem);
-            margin-bottom: 1rem;
-            color: #ff5722;
-            font-weight: 800;
-        }
-
-        .closed-content p {
-            font-size: clamp(1rem, 4vw, 1.25rem);
-            margin-bottom: 1rem;
-            opacity: 0.9;
-            line-height: 1.7;
-        }
-
-        .closed-hours-badge {
-            display: inline-block;
-            background: rgba(255,87,34,0.2);
-            border: 2px solid rgba(255,87,34,0.5);
-            border-radius: 50px;
-            padding: 10px 28px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ff8a65;
-            margin: 1rem 0;
-        }
-
-        #current-time {
-            font-size: 1rem;
-            margin-top: 1.5rem;
-            opacity: 0.7;
-            font-family: monospace;
-            letter-spacing: 1px;
-        }
-
-        #countdown-msg {
-            margin-top: 1rem;
-            font-size: 0.95rem;
-            opacity: 0.75;
-            font-style: italic;
-        }
-
-        /* Admin bypass */
-        .admin-bypass {
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 1.5rem;
-        }
-
-        .admin-bypass-toggle {
-            background: none;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: rgba(255,255,255,0.4);
-            font-size: 0.8rem;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .admin-bypass-toggle:hover {
-            color: rgba(255,255,255,0.7);
-            border-color: rgba(255,255,255,0.4);
-        }
-
-        .admin-bypass-form {
-            display: none;
-            margin-top: 1rem;
-            animation: fadeIn 0.3s ease;
-        }
-        .admin-bypass-form.show { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .bypass-input-wrap {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        #bypass-password {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px 16px;
-            border-radius: 30px;
-            font-size: 0.95rem;
-            width: 200px;
-            outline: none;
-            text-align: center;
-            letter-spacing: 3px;
-        }
-        #bypass-password::placeholder { letter-spacing: 0; opacity: 0.4; }
-        #bypass-password:focus { border-color: var(--primary); }
-
-        #bypass-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 30px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        #bypass-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(255,87,34,0.4); }
-
-        #bypass-error {
-            color: #ff8a80;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            display: none;
-            animation: shake 0.4s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
-        }
-        /* ========================================================= */
+        .closed-content h1 { font-size: 3rem; margin-bottom: 1rem; color: #ff5722; }
+        .closed-content p { font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9; }
+        #current-time { font-size: 1.1rem; margin-top: 1.5rem; opacity: 0.8; }
 
         #login-loading {
             display: none;
@@ -610,262 +473,64 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ===================== MAP STYLES 2026 ===================== */
-
-        /* GPS quick-action button */
-        .gps-quick-btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 14px;
-            border: 2px dashed #ffccbc;
-            background: linear-gradient(135deg, #fff8f6, #fff3f0);
-            color: #ff5722;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.25s;
-            margin-bottom: 14px;
-        }
-        .gps-quick-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-style: solid;
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,87,34,0.3);
-        }
-        .gps-quick-btn.loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        .gps-quick-btn.success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-color: #a5d6a7;
-            border-style: solid;
-        }
-
-        /* Search bar */
-        .map-search-wrap {
-            position: relative;
-            margin-bottom: 10px;
-        }
-        .map-search-wrap input {
-            padding: 13px 16px 13px 44px;
-            border-radius: 12px;
-            border: 2px solid #eee;
-            font-size: 0.95rem;
-            margin: 0;
-            transition: border-color 0.2s;
-        }
-        .map-search-wrap input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-        .map-search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.1rem;
-            pointer-events: none;
-        }
-        .map-search-results {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 0; right: 0;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            border: 1px solid #eee;
-            z-index: 2000;
-            max-height: 220px;
-            overflow-y: auto;
-            display: none;
-        }
-        .map-search-results.open { display: block; }
-        .search-result-item {
-            padding: 12px 16px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #f5f5f5;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            transition: background 0.15s;
-        }
-        .search-result-item:last-child { border-bottom: none; }
-        .search-result-item:hover { background: #fff3f0; }
-        .search-result-item .sri-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
-        .search-result-item .sri-name { font-weight: 600; color: #1a1a1a; }
-        .search-result-item .sri-detail { font-size: 0.8rem; color: #888; margin-top: 2px; }
-
-        /* Map container */
+        /* ===================== MAP STYLES ===================== */
         .map-wrapper {
-            position: relative;
-            border-radius: 16px;
+            margin-top: 12px;
+            border-radius: 14px;
             overflow: hidden;
             border: 2px solid #ffccbc;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            position: relative;
         }
         #delivery-map {
             width: 100%;
-            height: 360px;
+            height: 320px;
         }
-
-        /* Center crosshair pin — stays fixed while map moves */
-        .map-center-pin {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -100%);
-            z-index: 1000;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.15s;
-        }
-        .map-center-pin.dragging {
-            transform: translate(-50%, -115%) scale(1.15);
-        }
-        .map-center-pin .pin-head {
-            width: 34px;
-            height: 34px;
-            background: var(--primary);
-            border: 3px solid white;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            box-shadow: 0 4px 14px rgba(255,87,34,0.55);
-        }
-        .map-center-pin .pin-shadow {
-            width: 16px;
-            height: 6px;
-            background: rgba(0,0,0,0.18);
-            border-radius: 50%;
-            margin-top: 2px;
-            transition: all 0.15s;
-        }
-        .map-center-pin.dragging .pin-shadow {
-            width: 20px;
-            opacity: 0.5;
-        }
-
-        /* Ripple on confirm */
-        @keyframes pinRipple {
-            0% { box-shadow: 0 0 0 0 rgba(255,87,34,0.5); }
-            70% { box-shadow: 0 0 0 18px rgba(255,87,34,0); }
-            100% { box-shadow: 0 0 0 0 rgba(255,87,34,0); }
-        }
-        .map-center-pin.confirmed .pin-head {
-            animation: pinRipple 0.7s ease-out;
-        }
-
-        /* "Drag map to move pin" hint overlay */
-        .map-drag-hint {
-            position: absolute;
-            bottom: 14px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.62);
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 7px 16px;
-            border-radius: 30px;
-            z-index: 1000;
-            pointer-events: none;
-            white-space: nowrap;
-            backdrop-filter: blur(4px);
-            transition: opacity 0.5s;
-        }
-        .map-drag-hint.hide { opacity: 0; }
-
-        /* Confirm pin button inside map */
-        .map-confirm-btn {
-            position: absolute;
-            bottom: 52px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(255,87,34,0.45);
-            transition: all 0.2s;
-            white-space: nowrap;
-            display: none;
-        }
-        .map-confirm-btn.visible { display: block; }
-        .map-confirm-btn:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 10px 28px rgba(255,87,34,0.5); }
-
-        /* Location confirmed card */
-        #location-display {
-            font-size: 0.95rem;
-            color: #555;
-            background: #f9f9f9;
-            padding: 14px 16px;
-            border-radius: 12px;
-            margin-top: 12px;
-            transition: all 0.35s;
-            border: 1.5px solid transparent;
-        }
-        #location-display.confirmed {
-            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-            border-color: #a5d6a7;
-        }
-        .loc-card {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-        .loc-card-icon {
-            font-size: 1.6rem;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        .loc-card-body { flex: 1; }
-        .loc-card-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #888; }
-        .loc-card-address { font-weight: 700; color: #1a1a1a; margin: 3px 0 6px; font-size: 1rem; line-height: 1.4; }
-        .loc-card-coords { font-size: 0.78rem; color: #999; font-family: monospace; }
-        .loc-card-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 8px;
-            color: var(--primary);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .loc-card-link:hover { text-decoration: underline; }
-
-        /* Geocoding loading spinner in card */
-        .loc-geocoding {
-            color: #888;
-            font-size: 0.9rem;
+        .map-hint {
+            background: linear-gradient(135deg, #fff8f6, #fff3f0);
+            border: 1px solid #ffccbc;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            color: #777;
+            margin-top: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .loc-spinner {
-            width: 16px; height: 16px;
-            border: 2px solid #ddd;
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            flex-shrink: 0;
+        .map-pin-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
         }
-        /* ========================================================== */
+        .map-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0 6px;
+        }
+        .map-tab {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #555;
+        }
+        .map-tab.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        /* ===================================================== */
     </style>
 </head>
 
@@ -873,33 +538,6 @@
 
     <!-- Toast Container -->
     <div id="toast-container"></div>
-
-    <!-- ===================== CLOSED NOTICE ===================== -->
-    <div id="closed-notice">
-        <div class="closed-content">
-            <div class="closed-emoji">🌙</div>
-            <h1>We're Closed Right Now</h1>
-            <p>Sorry, SAOMA Food & Drink is not open at this time.<br>We'd love to serve you during our hours:</p>
-            <div class="closed-hours-badge">🕕 6:00 PM – 3:00 AM</div>
-            <p>Come back tonight and we'll have your favourite snacks & drinks ready! 🍢🥤</p>
-            <div id="current-time"></div>
-            <div id="countdown-msg"></div>
-
-            <!-- Admin bypass -->
-            <div class="admin-bypass">
-                <button class="admin-bypass-toggle" onclick="toggleBypassForm()">&#128272; Admin Access</button>
-                <div class="admin-bypass-form" id="bypass-form">
-                    <div class="bypass-input-wrap">
-                        <input type="password" id="bypass-password" placeholder="Enter password" maxlength="30"
-                            onkeydown="if(event.key===&#39;Enter&#39;) checkBypassPassword()">
-                        <button id="bypass-btn" onclick="checkBypassPassword()">Unlock</button>
-                    </div>
-                    <div id="bypass-error">&#10060; Wrong password. Try again.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ========================================================= -->
 
     <header>
         <nav class="navbar">
@@ -1002,47 +640,36 @@
                     </div>
 
                     <div style="margin:25px 0;">
-                        <label style="font-weight:700; font-size:1rem;">📍 Delivery Location <span style="color:red;">*</span></label>
-                        <p style="font-size:0.85rem; color:#888; margin:4px 0 14px;">We need your location to deliver to you</p>
+                        <label>📍 Delivery Location <span style="color:red;">*</span></label>
+                        <span class="map-pin-badge">📌 Pin your location on the map</span>
 
-                        <!-- ① One-tap GPS button -->
-                        <button type="button" id="gps-quick-btn" class="gps-quick-btn" onclick="doGpsQuick()">
-                            <span id="gps-btn-icon">📍</span>
-                            <span id="gps-btn-text">Use My Current Location (Recommended)</span>
-                        </button>
-
-                        <div style="text-align:center; color:#bbb; font-size:0.82rem; margin:10px 0 14px; display:flex; align-items:center; gap:8px;">
-                            <div style="flex:1; height:1px; background:#eee;"></div>
-                            or pin manually on map
-                            <div style="flex:1; height:1px; background:#eee;"></div>
+                        <!-- Tab switcher -->
+                        <div class="map-tabs">
+                            <button type="button" class="map-tab active" id="tab-map" onclick="switchMapTab('map')">🗺️ Pin on Map</button>
+                            <button type="button" class="map-tab" id="tab-gps" onclick="switchMapTab('gps')">📍 Use GPS</button>
                         </div>
 
-                        <!-- ② Search bar -->
-                        <div class="map-search-wrap">
-                            <span class="map-search-icon">🔍</span>
-                            <input type="text" id="map-search-input" placeholder="Search street, landmark, area..." autocomplete="off">
-                            <div class="map-search-results" id="map-search-results"></div>
-                        </div>
-
-                        <!-- ③ Map with center-pin -->
-                        <div class="map-wrapper" id="map-wrapper">
-                            <div id="delivery-map"></div>
-                            <!-- Fixed crosshair pin -->
-                            <div class="map-center-pin" id="map-center-pin">
-                                <div class="pin-head"></div>
-                                <div class="pin-shadow"></div>
+                        <!-- Map panel -->
+                        <div id="panel-map">
+                            <div class="map-wrapper">
+                                <div id="delivery-map"></div>
                             </div>
-                            <!-- Drag hint -->
-                            <div class="map-drag-hint" id="map-drag-hint">👆 Drag map to move pin</div>
-                            <!-- Confirm button -->
-                            <button type="button" class="map-confirm-btn" id="map-confirm-btn" onclick="confirmMapPin()">
-                                ✅ Confirm This Location
+                            <div class="map-hint">
+                                💡 Tap anywhere on the map to drop a pin for your delivery location. Drag the pin to adjust.
+                            </div>
+                        </div>
+
+                        <!-- GPS panel -->
+                        <div id="panel-gps" style="display:none;">
+                            <button type="button" id="get-location-btn" class="btn" style="background:#2196f3; width:100%; margin:12px 0;">
+                                📍 Get My Current Location (GPS)
                             </button>
                         </div>
 
-                        <!-- ④ Confirmed location card -->
-                        <div id="location-display">
-                            <span style="color:#bbb; font-size:0.9rem;">No location selected yet — use GPS or drag the map above.</span>
+                        <!-- Shared location display -->
+                        <div id="location-display"
+                            style="font-size:0.95rem; color:#555; min-height:60px; background:#f9f9f9; padding:12px; border-radius:8px; margin-top:10px;">
+                            No location selected yet.
                         </div>
                     </div>
 
@@ -1106,91 +733,6 @@
     </div>
 
     <script>
-        // ==================== OPENING HOURS CHECK (Cambodia Time UTC+7) ====================
-        function checkOpeningHours() {
-            // If admin already bypassed this session, skip the check
-            if (sessionStorage.getItem("saomaBypass") === "1") return;
-
-            // Get Cambodia local time (UTC+7)
-            const now = new Date();
-            const cambodiaOffset = 7 * 60; // minutes
-            const utcMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
-            const cambodiaMinutes = (utcMinutes + cambodiaOffset) % (24 * 60);
-            const cambodiaHour = Math.floor(cambodiaMinutes / 60);
-            const cambodiaMin = cambodiaMinutes % 60;
-
-            // Open: 18:00 (6 PM) to 03:00 (3 AM) next day
-            // That means: open if hour >= 18 OR hour < 3
-            const isOpen = cambodiaHour >= 18 || cambodiaHour < 3;
-
-            const notice = document.getElementById("closed-notice");
-
-            if (!isOpen) {
-                notice.classList.add("show");
-                updateClosedClock(cambodiaHour, cambodiaMin, cambodiaMinutes);
-                // Update clock every minute
-                setInterval(() => {
-                    const n = new Date();
-                    const um = n.getUTCHours() * 60 + n.getUTCMinutes();
-                    const cm = (um + cambodiaOffset) % (24 * 60);
-                    const ch = Math.floor(cm / 60);
-                    const cmm = cm % 60;
-                    updateClosedClock(ch, cmm, cm);
-                }, 60000);
-            }
-        }
-
-        function updateClosedClock(hour, min, totalMin) {
-            const ampm = hour >= 12 ? "PM" : "AM";
-            const h12 = hour % 12 || 12;
-            const mm = String(min).padStart(2, "0");
-            document.getElementById("current-time").textContent =
-                `⏰ Current time in Cambodia: ${h12}:${mm} ${ampm}`;
-
-            // Calculate minutes until 6 PM (18:00 = 1080 min)
-            const openMin = 18 * 60; // 1080
-            let waitMin = openMin - totalMin;
-            if (waitMin < 0) waitMin += 24 * 60; // shouldn't happen since we're only here when closed
-
-            const waitH = Math.floor(waitMin / 60);
-            const waitM = waitMin % 60;
-            document.getElementById("countdown-msg").textContent =
-                `Opens in ${waitH > 0 ? waitH + "h " : ""}${waitM}m`;
-        }
-        // ==================================================================================
-
-
-        // ==================== ADMIN BYPASS ====================
-        const ADMIN_PASSWORD = "saoma2026";  // Change this password!
-
-        function toggleBypassForm() {
-            const form = document.getElementById("bypass-form");
-            form.classList.toggle("show");
-            if (form.classList.contains("show")) {
-                setTimeout(() => document.getElementById("bypass-password").focus(), 100);
-            }
-        }
-
-        function checkBypassPassword() {
-            const input = document.getElementById("bypass-password").value;
-            const errorEl = document.getElementById("bypass-error");
-            if (input === ADMIN_PASSWORD) {
-                // Hide closed notice and allow access
-                document.getElementById("closed-notice").classList.remove("show");
-                document.getElementById("closed-notice").style.display = "none";
-                sessionStorage.setItem("saomaBypass", "1");
-            } else {
-                errorEl.style.display = "block";
-                errorEl.style.animation = "none";
-                void errorEl.offsetWidth; // reflow to restart animation
-                errorEl.style.animation = "shake 0.4s ease";
-                document.getElementById("bypass-password").value = "";
-                document.getElementById("bypass-password").focus();
-                setTimeout(() => { errorEl.style.display = "none"; }, 3000);
-            }
-        }
-        // ======================================================
-
         // ==================== Firebase ====================
         const firebaseConfig = {
             apiKey: "AIzaSyCMyF3ow0w-KoXGNbgcG6ZsydPFENj8h0E",
@@ -1220,7 +762,7 @@
             { id: 14, name: "ស្ទីង",                         price: 2000,  image: "IMG/Sting.jpg",          category: "drink" },
             { id: 15, name: "ទឹក",                           price: 1000,  image: "IMG/Water.png",          category: "drink" },
             { id: 16, name: "Jinro",                          price: 8000,  image: "IMG/Jinro.jpg",          category: "drink" },
-            { id: 17, name: "Bacchus",                        price: 2000,  image: "IMG/bacchus.jpg",        category: "drink" },
+            { id: 17, name: "Bacchus",                        price: 8000,  image: "IMG/bacchus.jpg",        category: "drink" },
         ];
 
         let cart = JSON.parse(localStorage.getItem("saomaCart")) || [];
@@ -1232,6 +774,7 @@
         // ==================== TOAST NOTIFICATION ====================
         function showToast(productName) {
             const container = document.getElementById("toast-container");
+
             const toast = document.createElement("div");
             toast.className = "toast";
             toast.innerHTML = `
@@ -1243,6 +786,8 @@
                 <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
             `;
             container.appendChild(toast);
+
+            // Auto-remove after 3 seconds
             setTimeout(() => removeToast(toast), 3000);
         }
 
@@ -1271,8 +816,9 @@
             if (existing) existing.quantity++;
             else cart.push({ id, quantity: 1 });
             saveCart();
+
             const prod = products.find(p => p.id === id);
-            if (prod) showToast(prod.name);
+            if (prod) showToast(prod.name);  // ← Toast instead of alert
         }
 
         function changeQuantity(id, delta) {
@@ -1431,7 +977,7 @@
             if (pageId === "orders") renderOrderHistory();
             if (pageId === "checkout") {
                 renderCheckoutSummary();
-                setTimeout(initDeliveryMap, 100);
+                setTimeout(initDeliveryMap, 100); // init map after section is visible
             }
         }
 
@@ -1516,202 +1062,148 @@
             }
         }
 
-        // ==================== MAP 2026 ====================
+        // ==================== MAP ====================
         let deliveryMap = null;
-        let searchDebounce = null;
-        let geocodeDebounce = null;
-        let mapMoved = false;   // track if user has moved map
-        let lastGeocode = null; // cached address
+        let deliveryMarker = null;
 
         function initDeliveryMap() {
-            if (deliveryMap) { deliveryMap.invalidateSize(); return; }
+            if (deliveryMap) {
+                deliveryMap.invalidateSize();
+                return;
+            }
 
+            // Default: Phnom Penh, Cambodia
             const defaultLat = 11.5564;
             const defaultLng = 104.9282;
             const startLat = userLocation ? userLocation.lat : defaultLat;
             const startLng = userLocation ? userLocation.lng : defaultLng;
 
-            deliveryMap = L.map("delivery-map", { zoomControl: true, attributionControl: false })
-                .setView([startLat, startLng], 16);
+            deliveryMap = L.map("delivery-map").setView([startLat, startLng], 15);
 
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(deliveryMap);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(deliveryMap);
 
-            // Attribution tucked small
-            L.control.attribution({ prefix: false, position: 'bottomleft' }).addTo(deliveryMap);
-
-            const pin = document.getElementById("map-center-pin");
-            const hint = document.getElementById("map-drag-hint");
-            const confirmBtn = document.getElementById("map-confirm-btn");
-
-            // Show confirm button + animate pin while dragging
-            deliveryMap.on("movestart", () => {
-                pin.classList.add("dragging");
-                pin.classList.remove("confirmed");
-                hint.classList.add("hide");
-                confirmBtn.classList.add("visible");
-                mapMoved = true;
+            // Custom red pin icon
+            const pinIcon = L.divIcon({
+                html: `<div style="
+                    width:36px; height:36px;
+                    background:var(--primary, #ff5722);
+                    border:3px solid white;
+                    border-radius:50% 50% 50% 0;
+                    transform:rotate(-45deg);
+                    box-shadow:0 4px 12px rgba(255,87,34,0.5);
+                "></div>`,
+                iconSize: [36, 36],
+                iconAnchor: [18, 36],
+                className: ""
             });
 
-            deliveryMap.on("moveend", () => {
-                pin.classList.remove("dragging");
-                const center = deliveryMap.getCenter();
-                // Show geocoding state
-                showGeocodingCard(center.lat, center.lng);
-            });
-
-            // If we have a saved location, show it confirmed right away
+            // If existing location, place marker
             if (userLocation) {
-                showConfirmedCard(userLocation.lat, userLocation.lng, null);
-                confirmBtn.classList.add("visible");
-            } else {
-                // First open: show hint
-                setTimeout(() => hint.classList.add("hide"), 4000);
-            }
-
-            // Search bar
-            const searchInput = document.getElementById("map-search-input");
-            const searchResults = document.getElementById("map-search-results");
-
-            searchInput.addEventListener("input", () => {
-                const q = searchInput.value.trim();
-                clearTimeout(searchDebounce);
-                if (q.length < 3) { searchResults.classList.remove("open"); return; }
-                searchDebounce = setTimeout(() => doMapSearch(q), 450);
-            });
-
-            searchInput.addEventListener("blur", () => {
-                setTimeout(() => searchResults.classList.remove("open"), 200);
-            });
-        }
-
-        async function doMapSearch(query) {
-            const resultsEl = document.getElementById("map-search-results");
-            resultsEl.innerHTML = '<div class="search-result-item"><span class="sri-icon">⏳</span><div><div class="sri-name">Searching...</div></div></div>';
-            resultsEl.classList.add("open");
-            try {
-                const url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=kh&q=" + encodeURIComponent(query);
-                const res = await fetch(url, { headers: { "Accept-Language": "en" } });
-                const data = await res.json();
-                if (!data.length) {
-                    resultsEl.innerHTML = '<div class="search-result-item"><span class="sri-icon">🔍</span><div><div class="sri-name">No results found</div><div class="sri-detail">Try a different name or zoom the map</div></div></div>';
-                    return;
-                }
-                resultsEl.innerHTML = "";
-                data.forEach(place => {
-                    const parts = place.display_name.split(", ");
-                    const name = parts[0];
-                    const detail = parts.slice(1, 4).join(", ");
-                    const item = document.createElement("div");
-                    item.className = "search-result-item";
-                    item.innerHTML = '<span class="sri-icon">📍</span><div><div class="sri-name">' + name + '</div><div class="sri-detail">' + detail + '</div></div>';
-                    item.onclick = () => {
-                        const lat = parseFloat(place.lat);
-                        const lng = parseFloat(place.lon);
-                        deliveryMap.setView([lat, lng], 17);
-                        resultsEl.classList.remove("open");
-                        document.getElementById("map-search-input").value = name;
-                        document.getElementById("map-confirm-btn").classList.add("visible");
-                        showGeocodingCard(lat, lng);
-                    };
-                    resultsEl.appendChild(item);
+                deliveryMarker = L.marker([userLocation.lat, userLocation.lng], {
+                    icon: pinIcon,
+                    draggable: true
+                }).addTo(deliveryMap);
+                deliveryMarker.bindPopup("📍 Your delivery location").openPopup();
+                deliveryMarker.on("dragend", (e) => {
+                    const pos = e.target.getLatLng();
+                    updateLocationFromMap(pos.lat, pos.lng);
                 });
-            } catch(e) {
-                resultsEl.innerHTML = '<div class="search-result-item"><span class="sri-icon">⚠️</span><div><div class="sri-name">Search failed — check connection</div></div></div>';
             }
+
+            // Click on map to set/move pin
+            deliveryMap.on("click", (e) => {
+                const { lat, lng } = e.latlng;
+                if (deliveryMarker) {
+                    deliveryMarker.setLatLng([lat, lng]);
+                } else {
+                    deliveryMarker = L.marker([lat, lng], {
+                        icon: pinIcon,
+                        draggable: true
+                    }).addTo(deliveryMap);
+                    deliveryMarker.bindPopup("📍 Your delivery location").openPopup();
+                    deliveryMarker.on("dragend", (ev) => {
+                        const pos = ev.target.getLatLng();
+                        updateLocationFromMap(pos.lat, pos.lng);
+                    });
+                }
+                updateLocationFromMap(lat, lng);
+            });
         }
 
-        function confirmMapPin() {
-            const center = deliveryMap.getCenter();
-            const lat = center.lat, lng = center.lng;
+        function updateLocationFromMap(lat, lng) {
             userLocation = { lat, lng };
             localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
-            const pin = document.getElementById("map-center-pin");
-            pin.classList.add("confirmed");
-            if (lastGeocode) {
-                showConfirmedCard(lat, lng, lastGeocode);
-            } else {
-                showConfirmedCard(lat, lng, null);
-                reverseGeocode(lat, lng, (addr) => showConfirmedCard(lat, lng, addr));
+            document.getElementById("location-display").innerHTML =
+                `✅ Pin placed!<br>
+                 <strong>Lat:</strong> ${lat.toFixed(6)}&nbsp;&nbsp;
+                 <strong>Lng:</strong> ${lng.toFixed(6)}<br>
+                 <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:var(--primary);">🔗 Preview on Google Maps</a>`;
+        }
+
+        function switchMapTab(tab) {
+            document.getElementById("tab-map").classList.toggle("active", tab === "map");
+            document.getElementById("tab-gps").classList.toggle("active", tab === "gps");
+            document.getElementById("panel-map").style.display = tab === "map" ? "block" : "none";
+            document.getElementById("panel-gps").style.display = tab === "gps" ? "block" : "none";
+            if (tab === "map") setTimeout(() => deliveryMap && deliveryMap.invalidateSize(), 100);
+        }
+        // =============================================
+
+        function getCurrentLocation() {
+            const btn = document.getElementById("get-location-btn");
+            btn.textContent = "Getting location...";
+            btn.disabled = true;
+
+            if (!navigator.geolocation) {
+                alert("Your browser does not support location services.");
+                resetLocationButton();
+                return;
             }
-        }
-
-        function showGeocodingCard(lat, lng) {
-            const display = document.getElementById("location-display");
-            display.className = "";
-            display.innerHTML = '<div class="loc-geocoding"><div class="loc-spinner"></div> Getting address...</div>';
-            lastGeocode = null;
-            clearTimeout(geocodeDebounce);
-            geocodeDebounce = setTimeout(() => {
-                reverseGeocode(lat, lng, (addr) => {
-                    lastGeocode = addr;
-                    display.innerHTML = '<div class="loc-card"><div class="loc-card-icon">📍</div><div class="loc-card-body"><div class="loc-card-label">Pin location</div><div class="loc-card-address">' + (addr || "Unknown area") + '</div><div class="loc-card-coords">' + lat.toFixed(6) + ', ' + lng.toFixed(6) + '</div></div></div><p style="font-size:0.8rem; color:#aaa; margin-top:8px;">Tap <strong>Confirm This Location</strong> to use this address</p>';
-                });
-            }, 600);
-        }
-
-        function showConfirmedCard(lat, lng, addr) {
-            const display = document.getElementById("location-display");
-            display.className = "confirmed";
-            const mapsUrl = "https://www.google.com/maps?q=" + lat + "," + lng;
-            display.innerHTML = '<div class="loc-card"><div class="loc-card-icon">✅</div><div class="loc-card-body"><div class="loc-card-label">Delivery location confirmed</div><div class="loc-card-address">' + (addr || "Location pinned") + '</div><div class="loc-card-coords">' + lat.toFixed(6) + ', ' + lng.toFixed(6) + '</div><a href="' + mapsUrl + '" target="_blank" class="loc-card-link">🗺️ Preview on Google Maps</a></div></div>';
-        }
-
-        async function reverseGeocode(lat, lng, callback) {
-            try {
-                const url = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + lng + "&zoom=17&addressdetails=1";
-                const res = await fetch(url, { headers: { "Accept-Language": "en" } });
-                const data = await res.json();
-                const a = data.address || {};
-                const parts = [a.road || a.pedestrian, a.suburb || a.neighbourhood || a.quarter, a.city || a.town || a.village].filter(Boolean);
-                callback(parts.length ? parts.join(", ") : data.display_name?.split(",").slice(0,3).join(",") || null);
-            } catch(e) { callback(null); }
-        }
-
-        // One-tap GPS
-        function doGpsQuick() {
-            const btn = document.getElementById("gps-quick-btn");
-            const icon = document.getElementById("gps-btn-icon");
-            const txt = document.getElementById("gps-btn-text");
-            if (!navigator.geolocation) { alert("GPS not supported on this device."); return; }
-            btn.classList.add("loading");
-            icon.textContent = "⏳";
-            txt.textContent = "Getting your location...";
 
             navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
                     userLocation = { lat, lng };
                     localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
-                    btn.classList.remove("loading");
-                    btn.classList.add("success");
-                    icon.textContent = "✅";
-                    txt.textContent = "Location found!";
-                    // Move map
+                    updateLocationFromMap(lat, lng);
+                    // Also move map pin if map is loaded
                     if (deliveryMap) {
-                        deliveryMap.setView([lat, lng], 17);
-                        document.getElementById("map-confirm-btn").classList.add("visible");
+                        deliveryMap.setView([lat, lng], 16);
+                        const pinIcon = L.divIcon({
+                            html: `<div style="width:36px;height:36px;background:var(--primary,#ff5722);border:3px solid white;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 4px 12px rgba(255,87,34,0.5);"></div>`,
+                            iconSize: [36, 36], iconAnchor: [18, 36], className: ""
+                        });
+                        if (deliveryMarker) {
+                            deliveryMarker.setLatLng([lat, lng]);
+                        } else {
+                            deliveryMarker = L.marker([lat, lng], { icon: pinIcon, draggable: true }).addTo(deliveryMap);
+                            deliveryMarker.on("dragend", (ev) => {
+                                const pos = ev.target.getLatLng();
+                                updateLocationFromMap(pos.lat, pos.lng);
+                            });
+                        }
                     }
-                    reverseGeocode(lat, lng, (addr) => {
-                        lastGeocode = addr;
-                        showConfirmedCard(lat, lng, addr);
-                        if (addr) txt.textContent = "✅ " + addr.split(",")[0];
-                    });
+                    btn.textContent = "✅ GPS Located";
+                    btn.style.backgroundColor = "#4caf50";
                 },
                 () => {
-                    btn.classList.remove("loading");
-                    icon.textContent = "❌";
-                    txt.textContent = "Could not get location — try the map";
-                    setTimeout(() => { icon.textContent = "📍"; txt.textContent = "Use My Current Location (Recommended)"; }, 3000);
+                    alert("Failed to get location. Please enable GPS and try again.");
+                    resetLocationButton();
                 },
-                { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 300000 }
             );
         }
 
-        // Legacy stubs (kept so nothing breaks)
-        function switchMapTab() {}
-        function getCurrentLocation() { doGpsQuick(); }
-        function resetLocationButton() {}
+        function resetLocationButton() {
+            const btn = document.getElementById("get-location-btn");
+            btn.textContent = "📍 Get My Current Location (GPS)";
+            btn.disabled = false;
+            btn.style.backgroundColor = "#2196f3";
+        }
 
         function closeQRModal() {
             document.getElementById("qr-modal").style.display = "none";
@@ -1813,9 +1305,6 @@
 
         // ==================== Initialize ====================
         document.addEventListener("DOMContentLoaded", () => {
-            // ✅ Check opening hours first
-            checkOpeningHours();
-
             updateCartCount();
             renderFeatured();
             renderProducts();
@@ -1855,7 +1344,7 @@
                     const note = document.getElementById("note").value.trim();
 
                     if (!name || !phone) return alert("Name and phone are required.");
-                    if (!userLocation) return alert("Please pin your delivery location on the map first!");
+                    if (!userLocation) return alert("Please get your current location using GPS first!");
 
                     const total = cart.reduce((sum, item) => {
                         const p = products.find(pr => pr.id === item.id);
@@ -1891,7 +1380,7 @@
                 .catch((error) => { if (error.code !== 'auth/no-current-user') console.warn("Redirect login error:", error); });
 
             if (userLocation) {
-                updateLocationFromMap(userLocation.lat, userLocation.lng, false);
+                updateLocationFromMap(userLocation.lat, userLocation.lng);
             }
         });
     </script>
