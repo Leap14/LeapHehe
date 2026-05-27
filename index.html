@@ -8,9 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-    <!-- Leaflet Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         :root {
@@ -130,15 +127,9 @@
             pointer-events: auto;
         }
 
-        .toast.removing {
-            animation: toastOut 0.35s ease forwards;
-        }
+        .toast.removing { animation: toastOut 0.35s ease forwards; }
 
-        .toast-icon {
-            font-size: 1.4rem;
-            flex-shrink: 0;
-        }
-
+        .toast-icon { font-size: 1.4rem; flex-shrink: 0; }
         .toast-body { flex: 1; }
         .toast-title { font-weight: 700; color: #ff7043; margin-bottom: 2px; }
         .toast-msg { opacity: 0.85; font-size: 0.88rem; }
@@ -432,24 +423,6 @@
             .hamburger { display: block; }
         }
 
-        #closed-notice {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, #1a1a1a, #3a3a3a);
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            z-index: 10000;
-            padding: 2rem;
-        }
-
-        .closed-content { max-width: 500px; }
-        .closed-content h1 { font-size: 3rem; margin-bottom: 1rem; color: #ff5722; }
-        .closed-content p { font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9; }
-        #current-time { font-size: 1.1rem; margin-top: 1.5rem; opacity: 0.8; }
-
         #login-loading {
             display: none;
             position: fixed;
@@ -472,71 +445,11 @@
             animation: spin 0.8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ===================== MAP STYLES ===================== */
-        .map-wrapper {
-            margin-top: 12px;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 2px solid #ffccbc;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        #delivery-map {
-            width: 100%;
-            height: 320px;
-        }
-        .map-hint {
-            background: linear-gradient(135deg, #fff8f6, #fff3f0);
-            border: 1px solid #ffccbc;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.88rem;
-            color: #777;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .map-pin-badge {
-            background: var(--primary);
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-        .map-tabs {
-            display: flex;
-            gap: 8px;
-            margin: 12px 0 6px;
-        }
-        .map-tab {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: 2px solid #ddd;
-            background: white;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #555;
-        }
-        .map-tab.active {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: white;
-        }
-        /* ===================================================== */
     </style>
 </head>
 
 <body>
 
-    <!-- Toast Container -->
     <div id="toast-container"></div>
 
     <header>
@@ -617,7 +530,6 @@
             <div class="cart-container">
                 <h2>Checkout</h2>
 
-                <!-- ✅ ORDER SUMMARY -->
                 <div class="order-summary-box" id="checkout-summary">
                     <h3>🛒 Your Order</h3>
                     <div id="checkout-summary-items"></div>
@@ -641,34 +553,12 @@
 
                     <div style="margin:25px 0;">
                         <label>📍 Delivery Location <span style="color:red;">*</span></label>
-                        <span class="map-pin-badge">📌 Pin your location on the map</span>
-
-                        <!-- Tab switcher -->
-                        <div class="map-tabs">
-                            <button type="button" class="map-tab active" id="tab-map" onclick="switchMapTab('map')">🗺️ Pin on Map</button>
-                            <button type="button" class="map-tab" id="tab-gps" onclick="switchMapTab('gps')">📍 Use GPS</button>
-                        </div>
-
-                        <!-- Map panel -->
-                        <div id="panel-map">
-                            <div class="map-wrapper">
-                                <div id="delivery-map"></div>
-                            </div>
-                            <div class="map-hint">
-                                💡 Tap anywhere on the map to drop a pin for your delivery location. Drag the pin to adjust.
-                            </div>
-                        </div>
-
-                        <!-- GPS panel -->
-                        <div id="panel-gps" style="display:none;">
-                            <button type="button" id="get-location-btn" class="btn" style="background:#2196f3; width:100%; margin:12px 0;">
-                                📍 Get My Current Location (GPS)
-                            </button>
-                        </div>
-
-                        <!-- Shared location display -->
+                        <button type="button" id="get-location-btn" class="btn"
+                            style="background:#2196f3; width:100%; margin:12px 0;">
+                            📍 Get My Current Location (GPS)
+                        </button>
                         <div id="location-display"
-                            style="font-size:0.95rem; color:#555; min-height:60px; background:#f9f9f9; padding:12px; border-radius:8px; margin-top:10px;">
+                            style="font-size:0.95rem; color:#555; min-height:60px; background:#f9f9f9; padding:12px; border-radius:8px; margin-top:6px;">
                             No location selected yet.
                         </div>
                     </div>
@@ -771,10 +661,9 @@
         let userLocation = JSON.parse(localStorage.getItem("saomaUserLocation")) || null;
         let pendingLoginCallback = null;
 
-        // ==================== TOAST NOTIFICATION ====================
+        // ==================== TOAST ====================
         function showToast(productName) {
             const container = document.getElementById("toast-container");
-
             const toast = document.createElement("div");
             toast.className = "toast";
             toast.innerHTML = `
@@ -786,8 +675,6 @@
                 <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
             `;
             container.appendChild(toast);
-
-            // Auto-remove after 3 seconds
             setTimeout(() => removeToast(toast), 3000);
         }
 
@@ -796,9 +683,8 @@
             toast.classList.add("removing");
             setTimeout(() => toast.remove(), 350);
         }
-        // ============================================================
 
-        // ==================== Cart Functions ====================
+        // ==================== Cart ====================
         function saveCart() {
             localStorage.setItem("saomaCart", JSON.stringify(cart));
             updateCartCount();
@@ -816,9 +702,8 @@
             if (existing) existing.quantity++;
             else cart.push({ id, quantity: 1 });
             saveCart();
-
             const prod = products.find(p => p.id === id);
-            if (prod) showToast(prod.name);  // ← Toast instead of alert
+            if (prod) showToast(prod.name);
         }
 
         function changeQuantity(id, delta) {
@@ -847,7 +732,7 @@
             localStorage.setItem(key, JSON.stringify(orders));
         }
 
-        // ==================== Render Functions ====================
+        // ==================== Render ====================
         function createProductCard(p, container) {
             const card = document.createElement("div");
             card.className = "product-card";
@@ -892,7 +777,6 @@
                 document.getElementById("cart-total").textContent = "0";
                 return;
             }
-
             let total = 0;
             cart.forEach(item => {
                 const prod = products.find(p => p.id === item.id);
@@ -918,18 +802,15 @@
             document.getElementById("cart-total").textContent = total.toLocaleString('en-US');
         }
 
-        // ==================== CHECKOUT SUMMARY ====================
         function renderCheckoutSummary() {
             const summaryContainer = document.getElementById("checkout-summary-items");
             summaryContainer.innerHTML = "";
             let total = 0;
-
             cart.forEach(item => {
                 const prod = products.find(p => p.id === item.id);
                 if (!prod) return;
                 const subtotal = prod.price * item.quantity;
                 total += subtotal;
-
                 const row = document.createElement("div");
                 row.className = "summary-item";
                 row.innerHTML = `
@@ -944,10 +825,8 @@
                 `;
                 summaryContainer.appendChild(row);
             });
-
             document.getElementById("checkout-summary-total").textContent = total.toLocaleString('en-US');
         }
-        // =========================================================
 
         function renderSuccess(order) {
             let html = `<strong>Customer:</strong> ${order.name}<br>
@@ -969,16 +848,12 @@
         }
 
         function showPage(pageId) {
-            document.querySelectorAll("main > section").forEach(section => section.classList.add("hidden"));
+            document.querySelectorAll("main > section").forEach(s => s.classList.add("hidden"));
             const target = document.getElementById(pageId);
             if (target) target.classList.remove("hidden");
-
             if (pageId === "cart") renderCart();
             if (pageId === "orders") renderOrderHistory();
-            if (pageId === "checkout") {
-                renderCheckoutSummary();
-                setTimeout(initDeliveryMap, 100); // init map after section is visible
-            }
+            if (pageId === "checkout") renderCheckoutSummary();
         }
 
         function goHome() {
@@ -1010,11 +885,9 @@
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
-
             const loadingEl = document.getElementById("login-loading");
             loadingEl.classList.add("show");
             closeLoginModal();
-
             auth.signInWithPopup(provider)
                 .then((result) => {
                     loadingEl.classList.remove("show");
@@ -1039,14 +912,12 @@
             const userInfo = document.getElementById("user-info");
             const mobileLoginBtn = document.getElementById("mobile-login-btn");
             const mobileUserInfo = document.getElementById("mobile-user-info");
-
             if (user) {
                 loginBtn.classList.add("hidden");
                 if (mobileLoginBtn) mobileLoginBtn.style.display = "none";
                 userInfo.classList.remove("hidden");
                 userInfo.innerHTML = `👤 ${user.displayName || user.email}
                     <button onclick="auth.signOut()" style="background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.3); padding:6px 14px; border-radius:25px;">Logout</button>`;
-
                 if (mobileUserInfo) {
                     mobileUserInfo.classList.remove("hidden");
                     mobileUserInfo.innerHTML = `<div style="padding:10px 0; border-top:1px solid rgba(255,255,255,0.2); margin-top:10px;">
@@ -1062,131 +933,29 @@
             }
         }
 
-        // ==================== MAP ====================
-        let deliveryMap = null;
-        let deliveryMarker = null;
-
-        function initDeliveryMap() {
-            if (deliveryMap) {
-                deliveryMap.invalidateSize();
-                return;
-            }
-
-            // Default: Phnom Penh, Cambodia
-            const defaultLat = 11.5564;
-            const defaultLng = 104.9282;
-            const startLat = userLocation ? userLocation.lat : defaultLat;
-            const startLng = userLocation ? userLocation.lng : defaultLng;
-
-            deliveryMap = L.map("delivery-map").setView([startLat, startLng], 15);
-
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 19
-            }).addTo(deliveryMap);
-
-            // Custom red pin icon
-            const pinIcon = L.divIcon({
-                html: `<div style="
-                    width:36px; height:36px;
-                    background:var(--primary, #ff5722);
-                    border:3px solid white;
-                    border-radius:50% 50% 50% 0;
-                    transform:rotate(-45deg);
-                    box-shadow:0 4px 12px rgba(255,87,34,0.5);
-                "></div>`,
-                iconSize: [36, 36],
-                iconAnchor: [18, 36],
-                className: ""
-            });
-
-            // If existing location, place marker
-            if (userLocation) {
-                deliveryMarker = L.marker([userLocation.lat, userLocation.lng], {
-                    icon: pinIcon,
-                    draggable: true
-                }).addTo(deliveryMap);
-                deliveryMarker.bindPopup("📍 Your delivery location").openPopup();
-                deliveryMarker.on("dragend", (e) => {
-                    const pos = e.target.getLatLng();
-                    updateLocationFromMap(pos.lat, pos.lng);
-                });
-            }
-
-            // Click on map to set/move pin
-            deliveryMap.on("click", (e) => {
-                const { lat, lng } = e.latlng;
-                if (deliveryMarker) {
-                    deliveryMarker.setLatLng([lat, lng]);
-                } else {
-                    deliveryMarker = L.marker([lat, lng], {
-                        icon: pinIcon,
-                        draggable: true
-                    }).addTo(deliveryMap);
-                    deliveryMarker.bindPopup("📍 Your delivery location").openPopup();
-                    deliveryMarker.on("dragend", (ev) => {
-                        const pos = ev.target.getLatLng();
-                        updateLocationFromMap(pos.lat, pos.lng);
-                    });
-                }
-                updateLocationFromMap(lat, lng);
-            });
-        }
-
-        function updateLocationFromMap(lat, lng) {
+        // ==================== GPS ====================
+        function updateLocationDisplay(lat, lng) {
             userLocation = { lat, lng };
             localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
             document.getElementById("location-display").innerHTML =
-                `✅ Pin placed!<br>
+                `✅ Location found!<br>
                  <strong>Lat:</strong> ${lat.toFixed(6)}&nbsp;&nbsp;
                  <strong>Lng:</strong> ${lng.toFixed(6)}<br>
                  <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:var(--primary);">🔗 Preview on Google Maps</a>`;
         }
 
-        function switchMapTab(tab) {
-            document.getElementById("tab-map").classList.toggle("active", tab === "map");
-            document.getElementById("tab-gps").classList.toggle("active", tab === "gps");
-            document.getElementById("panel-map").style.display = tab === "map" ? "block" : "none";
-            document.getElementById("panel-gps").style.display = tab === "gps" ? "block" : "none";
-            if (tab === "map") setTimeout(() => deliveryMap && deliveryMap.invalidateSize(), 100);
-        }
-        // =============================================
-
         function getCurrentLocation() {
             const btn = document.getElementById("get-location-btn");
             btn.textContent = "Getting location...";
             btn.disabled = true;
-
             if (!navigator.geolocation) {
                 alert("Your browser does not support location services.");
                 resetLocationButton();
                 return;
             }
-
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    userLocation = { lat, lng };
-                    localStorage.setItem("saomaUserLocation", JSON.stringify(userLocation));
-                    updateLocationFromMap(lat, lng);
-                    // Also move map pin if map is loaded
-                    if (deliveryMap) {
-                        deliveryMap.setView([lat, lng], 16);
-                        const pinIcon = L.divIcon({
-                            html: `<div style="width:36px;height:36px;background:var(--primary,#ff5722);border:3px solid white;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 4px 12px rgba(255,87,34,0.5);"></div>`,
-                            iconSize: [36, 36], iconAnchor: [18, 36], className: ""
-                        });
-                        if (deliveryMarker) {
-                            deliveryMarker.setLatLng([lat, lng]);
-                        } else {
-                            deliveryMarker = L.marker([lat, lng], { icon: pinIcon, draggable: true }).addTo(deliveryMap);
-                            deliveryMarker.on("dragend", (ev) => {
-                                const pos = ev.target.getLatLng();
-                                updateLocationFromMap(pos.lat, pos.lng);
-                            });
-                        }
-                    }
+                    updateLocationDisplay(position.coords.latitude, position.coords.longitude);
                     btn.textContent = "✅ GPS Located";
                     btn.style.backgroundColor = "#4caf50";
                 },
@@ -1204,6 +973,7 @@
             btn.disabled = false;
             btn.style.backgroundColor = "#2196f3";
         }
+        // =============================================
 
         function closeQRModal() {
             document.getElementById("qr-modal").style.display = "none";
@@ -1268,27 +1038,22 @@
         function renderOrderHistory() {
             const container = document.getElementById("orders-list");
             container.innerHTML = "";
-
             if (!auth.currentUser) {
                 container.innerHTML = `<p style="text-align:center; padding:3rem;">Please login to view your orders.</p>`;
                 return;
             }
-
             const uid = auth.currentUser.uid;
             const key = `saomaOrders_${uid}`;
             let orders = JSON.parse(localStorage.getItem(key)) || [];
-
             if (orders.length === 0) {
                 container.innerHTML = `<p style="text-align:center; padding:3rem;">You haven't placed any orders yet.</p>`;
                 return;
             }
-
             orders.forEach(order => {
                 let itemsHtml = order.cart.map(item => {
                     const p = products.find(pr => pr.id === item.id);
                     return `• ${p ? p.name : "Unknown"} × ${item.quantity}`;
                 }).join("<br>");
-
                 const div = document.createElement("div");
                 div.className = "cart-container";
                 div.style.marginBottom = "1.5rem";
@@ -1352,7 +1117,6 @@
                     }, 0);
 
                     lastOrder = { name, phone, note, cart: JSON.parse(JSON.stringify(cart)), total, location: userLocation };
-
                     document.getElementById("qr-amount").innerHTML = `Total: ៛${total.toLocaleString('en-US')}`;
                     document.getElementById("qr-modal").style.display = "flex";
                 });
@@ -1379,8 +1143,9 @@
                 .then((result) => { if (result && result.user) closeLoginModal(); })
                 .catch((error) => { if (error.code !== 'auth/no-current-user') console.warn("Redirect login error:", error); });
 
+            // Restore saved GPS location on page load
             if (userLocation) {
-                updateLocationFromMap(userLocation.lat, userLocation.lng);
+                updateLocationDisplay(userLocation.lat, userLocation.lng);
             }
         });
     </script>
